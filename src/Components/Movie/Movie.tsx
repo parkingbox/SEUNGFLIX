@@ -114,7 +114,7 @@ export const Span1 = styled(motion.span)`
   top: -150px;
   left: 20px;
 `;
-const SlideContainer = styled(motion.div)`
+export const SliderContainer = styled(motion.div)`
   height: 200px;
   width: 100%;
   position: relative;
@@ -283,7 +283,7 @@ function Movies() {
       ) : (
         <>
           <PlayWrapper>{/* movie trailer */}</PlayWrapper>
-          <SlideContainer>
+          <SliderContainer>
             <Span1>Tranding Now</Span1>
             <Slider>
               <PageChange>
@@ -333,7 +333,7 @@ function Movies() {
                 </Row>
               </AnimatePresence>
             </Slider>
-          </SlideContainer>
+          </SliderContainer>
         </>
       )}
     </Wrapper>
