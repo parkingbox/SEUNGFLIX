@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import styled from "styled-components";
-import { getMovies, IGetMoviesResult } from "../api";
-import { makeImagePath } from "./utilities";
+import { getMovies, IGetMoviesResult } from "../api/api";
+import { makeImagePath } from "../api/utils";
 import { useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 
