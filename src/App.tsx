@@ -9,8 +9,6 @@ import { GlobalStyle } from './Styles/GlobalStyle'
 function App() {
   return (
     <>
-    <GlobalStyle />
-    <Router/>
       <Header></Header>
       <Routes>
         <Route path="/tv" element={<Tv />}></Route>
