@@ -116,7 +116,12 @@ function Header() {
   const tvMatch = useMatch("/tv");
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
+  const navigate = useNavigate();
   const { scrollY } = useScroll();
+  const { register, handleSubmit } = useForm<IForm>();
+  const onValid = (data: IForm) => {
+    navigate(`/search?keyword=${data?.keyword}`);
+  };
   const toggleSearch = () => {
     if (searchOpen) {
       inputAnimation.start({
@@ -137,11 +142,6 @@ function Header() {
     });
   }, [scrollY, navAnimation]);
 
-  const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<IForm>();
-  const onValid = (data: IForm) => {
-    navigate(`/search?keyword=${data?.keyword}`);
-  };
 
   return (
     <Nav variants={navVariants} animate={navAnimation} initial={"top"}>

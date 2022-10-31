@@ -1,10 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./Components/Header";
-import Home from "./Routes/Home";
-import Search from "./Routes/Search";
-import Tv from "./Routes/Tv";
-import { GlobalStyle } from './Styles/GlobalStyle'
-
+import Header from "./Routes/Header";
+import Home from "./Components/Home";
+import Search from "./Components/Search";
+import Tv from "./Components/Tv";
+import { GlobalStyle } from "./Styles/GlobalStyle";
 
 function App() {
   return (

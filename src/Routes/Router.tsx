@@ -1,21 +1,28 @@
-import { Route, Routes } from "react-router-dom";
-import Header from "../Components/Header";
-import Home from "./Home";
-import Search from "./Search";
-import Tv from "./Tv";
+import { Route, Router, Routes } from "react-router-dom";
+import Header from "./Header";
+import Home from "../Components/Home";
+import Search from "../Components/Search";
+import Tv from "../Components/Tv";
+import Main from "../Components/Main";
+import Movie from "../Components/Movie";
 
-function Router() {
+function App() {
   return (
     <>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />}>
-          <Route path={"movies/:id"} element={<Home />}></Route>
-          <Route path="/tv" element={<Tv />}></Route>
-          <Route path={"tv/:id"} element={<Home />}></Route>
-          <Route path="/search" element={<Search />}></Route>
-        </Route>
-      </Routes>
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/movies" element={<Movie />}>
+            <Route path=":movieId" element={<Movie />} />
+
+          </Route>
+          <Route path="/tv" element={<Tv />}>
+            <Route path=":tvId" element={<Tv />} />
+          </Route>
+          <Route path="/search/*" element={<Search />} />
+        </Routes>
+      </Router>
     </>
   );
 }
