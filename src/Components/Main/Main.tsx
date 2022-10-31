@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
-import { getMovies, IGetMoviesResult } from "../Api/api";
-import Loading from "../Styles/Loading";
+import { getMovies, IGetMoviesResult } from "../../Api/api";
+import Loading from "../../Styles/Loading";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 
 const Body = styled.div`

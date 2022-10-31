@@ -85,7 +85,7 @@ const Input = styled(motion.input)`
   border: 1px solid ${(props) => props.theme.white.lighter};
 `;
 
-const logoVariants = {
+const logoVars = {
   normal: {
     fillOpacity: 1,
   },
@@ -97,7 +97,7 @@ const logoVariants = {
   },
 };
 
-const navVariants = {
+const navVars = {
   top: {
     backgroundColor: "rgba(0, 0, 0, 0)",
   },
@@ -112,7 +112,7 @@ interface IForm {
 
 function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
-  const homeMatch = useMatch("/");
+  const movieMatch = useMatch("/movies");
   const tvMatch = useMatch("/tv");
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
@@ -142,12 +142,11 @@ function Header() {
     });
   }, [scrollY, navAnimation]);
 
-
   return (
-    <Nav variants={navVariants} animate={navAnimation} initial={"top"}>
+    <Nav variants={navVars} animate={navAnimation} initial={"top"}>
       <Col>
         <Logo
-          variants={logoVariants}
+          variants={logoVars}
           whileHover="active"
           initial="normal"
           xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +158,12 @@ function Header() {
         </Logo>
         <Items>
           <Item>
-            <Link to="/">Home {homeMatch && <Circle layoutId="circle" />}</Link>
+            <Link to="/">Home</Link>
+          </Item>
+          <Item>
+            <Link to="movies">
+              Movie {movieMatch && <Circle layoutId="circle" />}
+            </Link>
           </Item>
           <Item>
             <Link to="/tv">

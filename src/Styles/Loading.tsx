@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import Box from '@mui/material/Box';
 
 
 const Container = styled.div`
@@ -17,9 +16,6 @@ const Loading = () => {
   return (
     <>
       <Container>
-        <Box>
-          
-        </Box>
         Loading...
       </Container>
     </>
