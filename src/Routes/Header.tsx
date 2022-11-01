@@ -141,6 +141,10 @@ function Header() {
       }
     });
   }, [scrollY, navAnimation]);
+  if (
+    movieMatch === null &&
+    tvMatch === null 
+  ) return null;
 
   return (
     <Nav variants={navVars} animate={navAnimation} initial={"top"}>

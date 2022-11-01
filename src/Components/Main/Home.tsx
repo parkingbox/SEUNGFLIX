@@ -2,8 +2,8 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getMovies, IGetMoviesResult } from "../Api/api";
-import Loading from "../Styles/Loading";
+import { getMovies, IGetMoviesResult } from "../../Api/api";
+import Loading from "../../Styles/Loading";
 
 const Body = styled.div`
   font-family: "Raleway Sans";

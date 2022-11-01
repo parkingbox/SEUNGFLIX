@@ -1,4 +1,4 @@
 function Tv() {
-  return <h1>hello</h1>;
+  return <h1>TV shows</h1>;
 }
 export default Tv;
