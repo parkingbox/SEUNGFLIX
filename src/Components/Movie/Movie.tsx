@@ -1,17 +1,26 @@
+import { useState } from "react";
 import styled from "styled-components";
-import { motion, useScroll } from "framer-motion";
+import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router-dom";
-import { getMovies, IGetMoviesResult } from "../../Api/api";
+import {
+  getMovies,
+  getMoviesTrailer,
+  IGetMoviesResult,
+  IGetMoviesTrailer,
+} from "../../Api/api";
 import Loading from "../../Styles/Loading";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { makeImagePath, makeTrailerPath, NothingPoster } from "../../Api/utils";
+import ReactPlayer from "react-player";
 
 const Wrapper = styled.div`
-  height: 100%;
   min-width: 1400px;
   background: black;
-  overflow-x: hidden;
+  height: 80vh;
 `;
-const PlayerContainer = styled.div`
+const PlayContainer = styled.div`
   min-width: 100%;
   height: 80vh;
   background-color: black;
@@ -19,14 +28,11 @@ const PlayerContainer = styled.div`
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  @media all and (max-width: 1024px) {
-    height: 100vh;
-  }
 `;
 
 const Banner = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 80vh;
   bottom: 0;
   display: flex;
   flex-direction: column;
@@ -35,59 +41,39 @@ const Banner = styled.div`
   position: absolute;
 `;
 
-const SliderContainer = styled(motion.div)`
-  height: 200px;
-  width: 100%;
-  background-color: green;
-`
-
-const SliderControl =styled(motion.div)`
-  width: 92%;
-  height: 50px;
-  display: flex;
-  color: white;
-  margin-bottom: 5px;
-  justify-content: space-between;
-  align-items: center;
-`
-const Span1 = styled(motion.span)`
-  color:white;
-  z-index:30;
-  font-size: 30px;
-  margin-left: 40px;
-  margin-right: 20px;
-  font-weight: 600;
-`
-
-function Movie() {
+function Movies() {
   const navigate = useNavigate();
-  const movieMatch = useMatch(`/movie/:movie:Id`);
-  const { scrollY } = useScroll();
-  const stateMovieId = localStorage.getItem("movieId");
   const { isLoading: infoLoading, data: info } = useQuery<IGetMoviesResult>(
     ["nowPlaying"],
     getMovies
   );
+  const stateMovieId = localStorage.getItem("movieId");
+  // const { data: trailer } = useQuery<IGetMoviesTrailer>(
+  // "startMovieTrailer",
+  //   () => getMoviesTrailer(String(stateMovieId))
+  // );
   return (
     <Wrapper>
       {infoLoading ? (
         <Loading />
       ) : (
         <>
-          <PlayerContainer>
-          </PlayerContainer>
-          <Banner/>
-
-          <SliderContainer>
-            <SliderControl>
-                <Span1>SEUNGFLIX 인기 콘텐츠</Span1>
-            </SliderControl>
-          </SliderContainer>
-
-
+          <PlayContainer>
+            {/* <ReactPlayer
+              url={makeTrailerPath(trailer?.results[0].key || "")}
+              volume={isVolum ? 0 : 0.3}
+              controls={false}
+              playing={true}
+              muted={isSound === "0" ? true : false}
+              loop={true}
+              width="200vw"
+              height="calc(110vh)"
+            ></ReactPlayer> */}
+          </PlayContainer>
+          <Banner />
         </>
       )}
     </Wrapper>
   );
 }
-export default Movie;
+export default Movies;

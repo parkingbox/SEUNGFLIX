@@ -112,16 +112,12 @@ interface IForm {
 
 function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
-  const movieMatch = useMatch("/movies");
+  const moviesMatch = useMatch("/movies");
   const tvMatch = useMatch("/tv");
+  const upcomingMatch = useMatch("/upcoming");
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
-  const navigate = useNavigate();
   const { scrollY } = useScroll();
-  const { register, handleSubmit } = useForm<IForm>();
-  const onValid = (data: IForm) => {
-    navigate(`/search?keyword=${data?.keyword}`);
-  };
   const toggleSearch = () => {
     if (searchOpen) {
       inputAnimation.start({
@@ -141,9 +137,15 @@ function Header() {
       }
     });
   }, [scrollY, navAnimation]);
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm<IForm>();
+  const onValid = (data: IForm) => {
+    navigate(`/search?keyword=${data?.keyword}`);
+  };
   if (
-    movieMatch === null &&
-    tvMatch === null 
+    moviesMatch === null &&
+    tvMatch === null &&
+    upcomingMatch === null 
   ) return null;
 
   return (
@@ -167,7 +169,7 @@ function Header() {
           <Item>
             <Link to="movies">
               Movies
-              {movieMatch && <Circle layoutId="circle" />}
+              {moviesMatch && <Circle layoutId="circle" />}
             </Link>
           </Item>
           <Item>
@@ -176,12 +178,12 @@ function Header() {
               {tvMatch && <Circle layoutId="circle" />}
             </Link>
           </Item>
-          {/* <Item>
+          <Item>
             <Link to="upcoming">
               Upcoming
-              {tvMatch && <Circle layoutId="circle" />}
+              {upcomingMatch && <Circle layoutId="circle" />}
             </Link>
-          </Item> */}
+          </Item>
         </Items>
       </Col>
       <Col>

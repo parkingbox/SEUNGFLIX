@@ -5,6 +5,9 @@ import Search from "../Components/Search/Search";
 import Tv from "../Components/Tv/Tv";
 import Movie from "../Components/Movie/Movie";
 import { ReactQueryDevtools } from "react-query/devtools";
+import Upcoming from "../Components/Upcoming/Upcoming";
+import Movies from "../Components/Movie/Movie";
+
 
 function Router() {
   return (
@@ -12,12 +15,14 @@ function Router() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/movies" element={<Movie />}>
-          <Route path="/movies/:movieId" element={<Movie />} />
+        <Route path="/movies" element={<Movies />}>
+          <Route path="/movies/:movieId" element={<Movies />} />
         </Route>
         <Route path="/tv" element={<Tv />}>
           <Route path="/tv/:tvId" element={<Tv />} />
         </Route>
+        <Route path="/upcoming" element={<Upcoming />}/>
+        <Route path="/upcoming/:upcomingId" element={<Upcoming />} />
         <Route path="/search/*" element={<Search />} />
       </Routes>
     </HashRouter>
