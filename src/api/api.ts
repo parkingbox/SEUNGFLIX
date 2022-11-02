@@ -8,6 +8,16 @@ export interface IMovie {
   title: string;
   overview: string;
 }
+export interface ISearch {
+  backdrop_path: string;
+  id: number;
+  original_title: string;
+  poster_path: string;
+  first_air_date: string;
+  vote_average: number;
+  media_type: string;
+  name: string;
+}
 
 export interface IGetMoviesResult {
   dates: {
@@ -20,9 +30,23 @@ export interface IGetMoviesResult {
   total_results: number;
 }
 
+export interface IGetSearchResult {
+  results: ISearch[];
+  total_results: number;
+}
+
+
+
 export const getMovies = async () => {
   const response = await fetch(
     `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&page=1`
   );
   return await response.json();
 };
+
+export const getSearch = async (keyword?: string) => {
+  const response = await fetch(
+    `${BASE_PATH}/search/multi?api_key=${API_KEY}&query=${keyword}&page=1&include_adult=false`
+  );
+  return await response.json();
+}

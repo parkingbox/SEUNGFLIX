@@ -47,8 +47,9 @@ const Headwrapper = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
 //logo box 변경하기
-const LogoBox = styled.div`
+export const LogoBox = styled.div`
   width: 15rem;
   height: 80px;
   margin: 5px;

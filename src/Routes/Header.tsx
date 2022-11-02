@@ -166,14 +166,22 @@ function Header() {
           </Item>
           <Item>
             <Link to="movies">
-              Movie {movieMatch && <Circle layoutId="circle" />}
+              Movies
+              {movieMatch && <Circle layoutId="circle" />}
             </Link>
           </Item>
           <Item>
-            <Link to="/tv">
-              Tv Shows {tvMatch && <Circle layoutId="circle" />}
+            <Link to="tv">
+              Tv Shows
+              {tvMatch && <Circle layoutId="circle" />}
             </Link>
           </Item>
+          {/* <Item>
+            <Link to="upcoming">
+              Upcoming
+              {tvMatch && <Circle layoutId="circle" />}
+            </Link>
+          </Item> */}
         </Items>
       </Col>
       <Col>
