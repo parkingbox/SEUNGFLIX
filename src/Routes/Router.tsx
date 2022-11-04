@@ -1,6 +1,6 @@
 import { HashRouter, Route, Routes } from "react-router-dom";
 import Header from "./Header";
-import Home from "../Components/Main/Home";
+import Home from "../Components/Home/Home";
 import Search from "../Components/Search/Search";
 import Tv from "../Components/Tv/Tv";
 import Movie from "../Components/Movie/Movie";

@@ -27,16 +27,6 @@ export interface ITV {
   first_air_date: string;
 }
 
-interface ISearch {
-  backdrop_path: string;
-  id: number;
-  original_title: string;
-  poster_path: string;
-  first_air_date: string;
-  vote_average: number;
-  media_type: string;
-  name: string;
-}
 
 interface IMovieTrailer {
   key: string;
@@ -58,6 +48,9 @@ interface ICompanies {
 
 interface ILanguages {
   name: string;
+}
+interface IMovieLogo {
+  file_path: string;
 }
 
 export interface IGetMoviesResult {
@@ -110,15 +103,17 @@ export interface IGetTVTrailer {
   results: ITVTrailer[];
 }
 
-export interface IGetSearchResult {
-  results: ISearch[];
-  total_results: number;
-}
 
 export interface IGetMovieSimilar {
   results: IMoiveSimilar[];
 }
 
+export interface IGetMovieImages {
+  id: number;
+  logos: IMovieLogo[];
+}
+
+//MOVIE API
 export const getMovies = async () => {
   const response = await fetch(
     `${BASE_PATH}/movie/popular?api_key=${API_KEY}&page=1`
@@ -140,6 +135,12 @@ export const getMoviesTrailer = async (movieId?: string) => {
   return await response.json();
 };
 
+export const getMovieImages = async (movieId?: string) => {
+  const response = await fetch(
+    `${BASE_PATH}/movie/${movieId}/images?api_key=${API_KEY}`
+  );
+  return await response.json();
+};
 export const getUpcoming = async (number?: number) => {
   const response = await fetch(
     `${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&page=${number}`
