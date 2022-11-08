@@ -22,15 +22,13 @@ const Wrapper = styled.div`
   background: black;
   height: 80vh;
 `;
-const PlayContainer = styled.div<{ bgPhoto: string }>`
+const PlayContainer = styled.div`
   min-width: 100%;
   height: 80vh;
   background-color: black;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${(props) => props.bgPhoto});
   overflow: hidden;
 `;
 const Title = styled(motion.img)`
@@ -125,9 +123,7 @@ function Movies() {
         <Loading />
       ) : (
         <>
-          <PlayContainer
-            bgPhoto={makeImagePath(info?.results[0].backdrop_path || "")}
-          ></PlayContainer>
+
         </>
       )}
     </Wrapper>
