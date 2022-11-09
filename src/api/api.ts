@@ -27,7 +27,6 @@ export interface ITV {
   first_air_date: string;
 }
 
-
 interface IMovieTrailer {
   key: string;
   id: string;
@@ -102,7 +101,6 @@ export interface IMoiveSimilar {
 export interface IGetTVTrailer {
   results: ITVTrailer[];
 }
-
 
 export interface IGetMovieSimilar {
   results: IMoiveSimilar[];
@@ -180,5 +178,10 @@ export const getMovieSimilar = async (movieId?: string) => {
   const response = await fetch(
     `${BASE_PATH}/movie/${movieId}/similar?api_key=${API_KEY}&page=1`
   );
+  return await response.json();
+};
+
+export const getMoviesPopular = async () => {
+  const response = await fetch(`${BASE_PATH}/movie/popular?api_key=${API_KEY}&page=2`);
   return await response.json();
 };
