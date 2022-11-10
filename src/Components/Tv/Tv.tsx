@@ -16,6 +16,7 @@ import {
   Span1,
   boxVars,
   infoVars,
+  Overlays,
 } from "../Movie/Movie";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -83,7 +84,11 @@ function Tv() {
         <Loading />
       ) : (
         <>
-          <PlayWrapper>{/* TV trailer */}</PlayWrapper>
+          <PlayWrapper>
+            <Overlays>
+              {/* TV trailer */}
+            </Overlays>
+          </PlayWrapper>
           <SliderContainer>
             <Span1>Tranding Now</Span1>
             <Slider>

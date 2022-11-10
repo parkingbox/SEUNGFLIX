@@ -15,10 +15,6 @@ const Nav = styled(motion.nav)`
   padding: 20px 60px;
   color: white;
   z-index: 100;
-  @media all and (max-width: 1024px) {
-    padding: 10px 20px;
-    font-size: 8px;
-  }
 `;
 
 const Col = styled.div`
@@ -60,6 +56,7 @@ const Search = styled.form`
   display: flex;
   align-items: center;
   position: relative;
+  cursor: pointer;
   svg {
     height: 25px;
   }

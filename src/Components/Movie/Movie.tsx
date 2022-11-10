@@ -53,7 +53,7 @@ const Banner = styled.div`
   position: absolute;
 `;
 
-const Overlays = styled(motion.div)`
+export const Overlays = styled(motion.div)`
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -283,7 +283,11 @@ function Movies() {
         <Loading />
       ) : (
         <>
-          <PlayWrapper>{/* movie trailer */}</PlayWrapper>
+          <PlayWrapper>
+            <Overlays>
+            {/* movie trailer */}
+            </Overlays>
+          </PlayWrapper>
           <SliderContainer>
             <Span1>Tranding Now</Span1>
             <Slider>
