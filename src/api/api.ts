@@ -17,7 +17,7 @@ export interface IMovie {
   vote_average: string;
 }
 
-export interface ITV {
+export interface ITv {
   id: number;
   backdrop_path: string;
   original_name: string;
@@ -78,7 +78,7 @@ export interface IGetMoviesTrailer {
 
 export interface IGetTVResult {
   page: number;
-  results: ITV[];
+  results: ITv[];
 }
 
 export interface IGetTVDetail {
@@ -141,14 +141,14 @@ export const getMovieImages = async (movieId?: string) => {
 };
 export const getUpcoming = async (number?: number) => {
   const response = await fetch(
-    `${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&page=${number}`
+    `${BASE_PATH}/tv/popular?api_key=${API_KEY}&page=${number}`
   );
   return await response.json();
 };
 
-export const getTv = async (number?: number) => {
+export const getTv = async () => {
   const response = await fetch(
-    `${BASE_PATH}/tv/popular?api_key=${API_KEY}&page=${number}`
+    `${BASE_PATH}/tv/popular?api_key=${API_KEY}&page=1`
   );
   return await response.json();
 };
@@ -182,6 +182,8 @@ export const getMovieSimilar = async (movieId?: string) => {
 };
 
 export const getMoviesPopular = async () => {
-  const response = await fetch(`${BASE_PATH}/movie/popular?api_key=${API_KEY}&page=2`);
+  const response = await fetch(
+    `${BASE_PATH}/movie/popular?api_key=${API_KEY}&page=2`
+  );
   return await response.json();
 };
