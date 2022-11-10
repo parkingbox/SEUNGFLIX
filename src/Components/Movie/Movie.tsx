@@ -34,6 +34,7 @@ const PlayWrapper = styled.div`
   justify-content: center;
   overflow: hidden;
 `;
+
 const Title = styled(motion.img)`
   width: 30%;
   margin-left: 20px;
@@ -73,7 +74,7 @@ const Overlays = styled(motion.div)`
     );
 `;
 
-const PageChange = styled.div`
+export const PageChange = styled.div`
   width: 100%;
   height: 400px;
   display: flex;
@@ -120,13 +121,13 @@ export const SliderContainer = styled(motion.div)`
   position: relative;
   margin-bottom: 5%;
 `;
-const Slider = styled.div`
+export const Slider = styled.div`
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
-const Row = styled(motion.div)`
+export const Row = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 3px;
@@ -134,7 +135,7 @@ const Row = styled(motion.div)`
   width: 95%;
 `;
 
-const Box = styled(motion.div)<{ bgphoto: string }>`
+export const Box = styled(motion.div)<{ bgphoto: string }>`
   position: relative;
   background-color: white;
   height: 200px;
@@ -163,7 +164,7 @@ export const InfoTitle = styled(motion.div)`
     font-size: 18px;
   }
 `;
-const titleVars = {
+export const titleVars = {
   animate: (lowR: boolean) => ({
     scale: 0.8,
     y: lowR ? "60%" : "40%",
@@ -174,7 +175,7 @@ const titleVars = {
     },
   }),
 };
-const boxVars = {
+export const boxVars = {
   normal: {
     scale: 1,
   },

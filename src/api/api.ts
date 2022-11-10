@@ -19,6 +19,7 @@ export interface IMovie {
 
 export interface ITv {
   id: number;
+  name: string;
   backdrop_path: string;
   original_name: string;
   overview: string;
