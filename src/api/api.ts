@@ -37,6 +37,16 @@ interface ITVTrailer {
   key: string;
   id: string;
 }
+interface ISearch {
+  backdrop_path: string;
+  id: number;
+  original_title: string;
+  poster_path: string;
+  first_air_date: string;
+  vote_average: number;
+  media_type: string;
+  name: string;
+}
 
 interface IGenres {
   name: string;
@@ -111,6 +121,11 @@ export interface IGetMovieImages {
   id: number;
   logos: IMovieLogo[];
 }
+export interface IGetSearchResult {
+  results: ISearch[];
+  total_results: number;
+}
+
 
 //MOVIE API
 export const getMovies = async () => {
