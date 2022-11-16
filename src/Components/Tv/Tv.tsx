@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { getTv, IGetTVResult } from "../../Api/api";
+import { getTv, getTvAir, getTvTop, IGetTVResult } from "../../Api/api";
 import Loading from "../../Styles/Loading";
 import {
   Decrease,
@@ -47,10 +47,23 @@ function Tv() {
     ["tvs", "nowPlaying"],
     getTv
   );
+  const { data: aInfo } = useQuery<IGetTvResult>(
+    ["tvsAir", "airPlaying"],
+    getTvAir
+  );
+  const { data: tInfo } = useQuery<IGetTvResult>(
+    ["tvsTop", "topPlaying"],
+    getTvTop
+  );
   const [leaving, setLeaving] = useState(false);
   const [isBack, setIsBack] = useState(false);
   const [isVolum, setIsVolum] = useState(false);
+
+  //INDEX
   const [index, setIndex] = useState(0);
+  const [pIndex, setPIndex] = useState(0);
+  const [tIndex, setTIndex] = useState(0);
+  const [wIndex, setWIndex] = useState(0);
 
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (tvId: number) => {
@@ -85,64 +98,8 @@ function Tv() {
       ) : (
         <>
           <PlayWrapper>
-            <Overlays>
-              {/* TV trailer */}
-            </Overlays>
+            <Overlays>{/* TV trailer */}</Overlays>
           </PlayWrapper>
-          <SliderContainer>
-            <Span1>Tranding Now</Span1>
-            <Slider>
-              <PageChange>
-                <Decrease whileHover={{ scale: 1.2 }} onClick={decreaseIndex}>
-                  <ArrowBackIosIcon
-                    style={{ marginLeft: 20 }}
-                    fontSize="large"
-                  />
-                </Decrease>
-                <Increase whileHover={{ scale: 1.2 }} onClick={increaseIndex}>
-                  <ArrowForwardIosIcon fontSize="large" />
-                </Increase>
-              </PageChange>
-              <AnimatePresence
-                custom={isBack}
-                initial={false}
-                onExitComplete={toggleLeaving}
-              >
-                <Row
-                  custom={isBack}
-                  variants={rowVars}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  transition={{ type: "tween", duration: 1 }}
-                  key={index}
-                >
-                  {info?.results
-                    ?.slice(index * offset + 1, index * offset + offset + 1)
-                    .map((tv, index) => (
-                      <Box
-                        layoutId={tv.id + ""}
-                        onClick={() => onBoxClicked(tv.id)}
-                        key={index}
-                        whileHover="hover"
-                        initial="normal"
-                        exit="exit"
-                        variants={boxVars}
-                        transition={{ type: "tween" }}
-                        bgphoto={
-                          makeImagePath(tv.backdrop_path, "w500") ||
-                          NothingPoster
-                        }
-                      >
-                        <InfoTitle variants={infoVars}>
-                          <p>{tv.name}</p>
-                        </InfoTitle>
-                      </Box>
-                    ))}
-                </Row>
-              </AnimatePresence>
-            </Slider>
-          </SliderContainer>
         </>
       )}
     </Wrapper>

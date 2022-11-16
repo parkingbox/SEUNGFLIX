@@ -11,6 +11,8 @@ import {
   IGetMovieImages,
   IGetMoviesResult,
   IGetMoviesTrailer,
+  getMoviesTop,
+  getMoviesWeek,
 } from "../../Api/api";
 import Loading from "../../Styles/Loading";
 import { makeImagePath, NothingPoster } from "../../Api/utils";
@@ -21,9 +23,8 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const Wrapper = styled.div`
-  min-width: 1400px;
   background: black;
-  height: 80vh;
+  height: 100%;
 `;
 const PlayWrapper = styled.div`
   min-width: 100%;
@@ -114,12 +115,20 @@ export const Span1 = styled(motion.span)`
   position: absolute;
   top: -150px;
   left: 20px;
+  @media screen and (max-width: 1280px) {
+    font-size: 20px;
+    top: -110px;
+    margin-left: 20px;
+  }
 `;
 export const SliderContainer = styled(motion.div)`
   height: 200px;
   width: 100%;
   position: relative;
   margin-bottom: 5%;
+  @media screen and (max-width: 1280px) {
+    margin-bottom: 1%;
+  }
 `;
 export const Slider = styled.div`
   position: relative;
@@ -133,6 +142,9 @@ export const Row = styled(motion.div)`
   gap: 3px;
   position: absolute;
   width: 95%;
+  @media screen and (max-width: 1280px) {
+    height: 150px;
+  }
 `;
 
 export const Box = styled(motion.div)<{ bgphoto: string }>`
@@ -149,6 +161,9 @@ export const Box = styled(motion.div)<{ bgphoto: string }>`
   }
   &:last-child {
     transform-origin: center right;
+  }
+  @media screen and (max-width: 1280px) {
+    height: 150px;
   }
 `;
 export const InfoTitle = styled(motion.div)`
@@ -217,14 +232,25 @@ export const infoVars = {
 function Movies() {
   const navigate = useNavigate();
   const stateMovieId = localStorage.getItem("movieId");
+
+  //API
   const { isLoading: infoLoading, data: info } = useQuery<IGetMoviesResult>(
-    ["nowPlaying"],
+    ["movies", "nowPlaying"],
     getMovies
   );
-  const { data: Info } = useQuery<IGetMoviesResult>(
-    ["Movies", "NowPlaying"],
+  const { data: pInfo } = useQuery<IGetMoviesResult>(
+    ["pMovies", "pNowPlaying"],
     getMoviesPopular
   );
+  const { data: tInfo } = useQuery<IGetMoviesResult>(
+    ["tMovies", "tNowPlaying"],
+    getMoviesTop
+  );
+  const { data: wInfo } = useQuery<IGetMoviesResult>(
+    ["wMovies", "wNowPlaying"],
+    getMoviesWeek
+  );
+
   const { data: trailer } = useQuery<IGetMoviesTrailer>(
     ["startMovieTrailer"],
     () => getMoviesTrailer(String(stateMovieId))
@@ -236,21 +262,15 @@ function Movies() {
   const [leaving, setLeaving] = useState(false);
   const [isVolum, setIsVolum] = useState(false);
   const [isBack, setIsBack] = useState(false);
+
+  //INDEX
   const [index, setIndex] = useState(0);
-  const [isSound, setIsSound] = useRecoilState<SoundEnums>(isSoundAtom);
-  const { OFF, ON } = SoundEnums;
-  //Sound ON, OFF
-  const handleChangeSound = useCallback((): void => {
-    if (isSound === OFF) {
-      localStorage.setItem("sound", ON);
-      setIsSound(ON);
-      return;
-    }
-    localStorage.setItem("sound", OFF);
-    setIsSound(OFF);
-  }, [OFF, ON, isSound, setIsSound]);
+  const [pIndex, setPIndex] = useState(0);
+  const [tIndex, setTIndex] = useState(0);
+  const [wIndex, setWIndex] = useState(0);
 
   let offset = 6;
+  //Index of Movie box
   const increaseIndex = () => {
     if (info) {
       if (leaving) return;
@@ -261,6 +281,7 @@ function Movies() {
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
+
   const decreaseIndex = () => {
     if (info) {
       if (leaving) return;
@@ -271,6 +292,73 @@ function Movies() {
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
+
+  const increasePIndex = () => {
+    if (pInfo) {
+      if (leaving) return;
+      toggleLeaving();
+      setIsBack(false);
+      const totalMovies = pInfo?.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setPIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
+  };
+
+  const decreasePIndex = () => {
+    if (pInfo) {
+      if (leaving) return;
+      toggleLeaving();
+      setIsBack(true);
+      const totalMovies = pInfo?.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setPIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+    }
+  };
+
+  const increaseTIndex = () => {
+    if (tInfo) {
+      if (leaving) return;
+      toggleLeaving();
+      setIsBack(false);
+      const totalMovies = tInfo?.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setTIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
+  };
+
+  const decreaseTIndex = () => {
+    if (tInfo) {
+      if (leaving) return;
+      toggleLeaving();
+      setIsBack(true);
+      const totalMovies = tInfo?.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setTIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+    }
+  };
+
+  const increaseWIndex = () => {
+    if (wInfo) {
+      if (leaving) return;
+      toggleLeaving();
+      setIsBack(false);
+      const totalMovies = wInfo.results.length - 1 ;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setWIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
+  };
+
+  const decreaseWIndex = () => {
+    if (wInfo) {
+      if (leaving) return;
+      toggleLeaving();
+      setIsBack(true);
+      const totalMovies = wInfo?.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setWIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+    }
+  };
+
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (movieId: number) => {
     navigate(`/movies/${movieId}`);
@@ -284,54 +372,147 @@ function Movies() {
       ) : (
         <>
           <PlayWrapper>
-            <Overlays>
-            {/* movie trailer */}
-            </Overlays>
+            <Overlays>{/* movie trailer */}</Overlays>
           </PlayWrapper>
           <SliderContainer>
-            <Span1>Tranding Now</Span1>
+            <Span1>Trending Now</Span1>
             <Slider>
               <PageChange>
                 <Decrease whileHover={{ scale: 1.2 }} onClick={decreaseIndex}>
-                  <ArrowBackIosIcon fontSize="large" />
+                  <ArrowBackIosIcon style={{ marginLeft: 20 }} fontSize="large" />
                 </Decrease>
                 <Increase whileHover={{ scale: 1.2 }} onClick={increaseIndex}>
                   <ArrowForwardIosIcon fontSize="large" />
                 </Increase>
               </PageChange>
-              <AnimatePresence
-                custom={isBack}
-                initial={false}
-                onExitComplete={toggleLeaving}
-              >
-                <Row
-                  custom={isBack}
-                  variants={rowVars}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  transition={{ type: "tween", duration: 1 }}
-                  key={index}
-                >
+              <AnimatePresence custom={isBack} initial={false} onExitComplete={toggleLeaving}>
+                <Row custom={isBack} variants={rowVars} initial="invisible" animate="visible" exit="exit" transition={{ type: "tween", duration: 1 }} key={index}>
                   {info?.results
-                    ?.slice(index * offset + 1, index * offset + offset + 1)
-                    .map((movie, index) => (
+                    .slice(1)
+                    .slice(index * offset + 1, index * offset + offset + 1)
+                    .map((movie) => (
                       <Box
                         layoutId={movie.id + ""}
-                        onClick={() => onBoxClicked(movie.id)}
-                        key={index}
+                        key={movie.id}
                         whileHover="hover"
                         initial="normal"
                         exit="exit"
                         variants={boxVars}
                         transition={{ type: "tween" }}
-                        bgphoto={
-                          makeImagePath(movie.backdrop_path, "w500") ||
-                          NothingPoster
-                        }
+                        onClick={() => onBoxClicked(movie.id)}
+                        bgphoto={makeImagePath(movie.backdrop_path, "w500") || NothingPoster}
                       >
                         <InfoTitle variants={infoVars}>
-                          <h4>{movie.title}</h4>
+                          <p>{movie.title}</p>
+                        </InfoTitle>
+                      </Box>
+                    ))}
+                </Row>
+              </AnimatePresence>
+            </Slider>
+          </SliderContainer>
+          <SliderContainer>
+            <Span1>Only on Seungflix</Span1>
+            <Slider>
+              <PageChange>
+                <Decrease whileHover={{ scale: 1.2 }} onClick={decreasePIndex}>
+                  <ArrowBackIosIcon style={{ marginLeft: 20 }} fontSize="large" />
+                </Decrease>
+                <Increase whileHover={{ scale: 1.2 }} onClick={increasePIndex}>
+                  <ArrowForwardIosIcon fontSize="large" />
+                </Increase>
+              </PageChange>
+              <AnimatePresence custom={isBack} initial={false} onExitComplete={toggleLeaving}>
+                <Row custom={isBack} variants={rowVars} initial="invisible" animate="visible" exit="exit" transition={{ type: "tween", duration: 1 }} key={pIndex}>
+                  {pInfo?.results
+                    .slice(pIndex * offset + 1, pIndex * offset + offset + 1)
+                    .map((movie) => (
+                      <Box
+                        layoutId={movie.id + "p"}
+                        key={movie.id}
+                        whileHover="hover"
+                        initial="normal"
+                        exit="exit"
+                        variants={boxVars}
+                        transition={{ type: "tween" }}
+                        onClick={() => onBoxClicked(movie.id)}
+                        bgphoto={makeImagePath(movie.backdrop_path, "w500") || NothingPoster}
+                      >
+                        <InfoTitle variants={infoVars}>
+                          <p>{movie.title}</p>
+                        </InfoTitle>
+                      </Box>
+                    ))}
+                </Row>
+              </AnimatePresence>
+            </Slider>
+          </SliderContainer>
+          <SliderContainer>
+            <Span1>Movie of the Week</Span1>
+            <Slider>
+              <PageChange>
+                <Decrease whileHover={{ scale: 1.2 }} onClick={decreaseWIndex}>
+                  <ArrowBackIosIcon style={{ marginLeft: 20 }} fontSize="large" />
+                </Decrease>
+                <Increase whileHover={{ scale: 1.2 }} onClick={increaseWIndex}>
+                  <ArrowForwardIosIcon fontSize="large" />
+                </Increase>
+              </PageChange>
+              <AnimatePresence custom={isBack} initial={false} onExitComplete={toggleLeaving}>
+                <Row custom={isBack} variants={rowVars} initial="invisible" animate="visible" exit="exit" transition={{ type: "tween", duration: 1 }} key={wIndex}>
+                  {wInfo?.results
+                    .slice(wIndex * offset + 1, wIndex * offset + offset + 1)
+                    .map((movie) => (
+                      <Box
+                        layoutId={movie.id + "w"}
+                        key={movie.id}
+                        whileHover="hover"
+                        initial="normal"
+                        exit="exit"
+                        variants={boxVars}
+                        transition={{ type: "tween" }}
+                        onClick={() => onBoxClicked(movie.id)}
+                        bgphoto={makeImagePath(movie.backdrop_path, "w500") || NothingPoster}
+                      >
+                        <InfoTitle variants={infoVars}>
+                          <p>{movie.title}</p>
+                        </InfoTitle>
+                      </Box>
+                    ))}
+                </Row>
+              </AnimatePresence>
+            </Slider>
+          </SliderContainer>
+          <SliderContainer>
+            <Span1>Top Rated Movies</Span1>
+            <Slider>
+              <PageChange>
+                <Decrease whileHover={{ scale: 1.2 }} onClick={decreaseTIndex}>
+                  <ArrowBackIosIcon style={{ marginLeft: 20 }} fontSize="large" />
+                </Decrease>
+                <Increase whileHover={{ scale: 1.2 }} onClick={increaseTIndex}>
+                  <ArrowForwardIosIcon fontSize="large" />
+                </Increase>
+              </PageChange>
+              <AnimatePresence custom={isBack} initial={false} onExitComplete={toggleLeaving}>
+                <Row custom={isBack} variants={rowVars} initial="invisible" animate="visible" exit="exit" transition={{ type: "tween", duration: 1 }} key={tIndex}>
+                  {tInfo?.results
+                    .slice(1)
+                    .slice(tIndex * offset + 1, tIndex * offset + offset + 1)
+                    .map((movie) => (
+                      <Box
+                        layoutId={movie.id + "t"}
+                        key={movie.id}
+                        whileHover="hover"
+                        initial="normal"
+                        exit="exit"
+                        variants={boxVars}
+                        transition={{ type: "tween" }}
+                        onClick={() => onBoxClicked(movie.id)}
+                        bgphoto={makeImagePath(movie.backdrop_path, "w500") || NothingPoster}
+                      >
+                        <InfoTitle variants={infoVars}>
+                          <p>{movie.title}</p>
                         </InfoTitle>
                       </Box>
                     ))}
