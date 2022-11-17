@@ -61,9 +61,8 @@ function Tv() {
 
   //INDEX
   const [index, setIndex] = useState(0);
-  const [pIndex, setPIndex] = useState(0);
+  const [aIndex, setAIndex] = useState(0);
   const [tIndex, setTIndex] = useState(0);
-  const [wIndex, setWIndex] = useState(0);
 
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (tvId: number) => {
@@ -130,7 +129,117 @@ function Tv() {
                 >
                   {info?.results
                     .slice(1)
-                    .slice(index * offset + 1, index * offset + offset + 1)
+                    .slice(aIndex * offset + 1, aIndex * offset + offset + 1)
+                    .map((tv) => (
+                      <Box
+                        layoutId={tv.id + ""}
+                        key={tv.id}
+                        whileHover="hover"
+                        initial="normal"
+                        exit="exit"
+                        variants={boxVars}
+                        transition={{ type: "tween" }}
+                        onClick={() => onBoxClicked(tv.id)}
+                        bgphoto={
+                          makeImagePath(tv.backdrop_path, "w500") ||
+                          NothingPoster
+                        }
+                      >
+                        <InfoTitle variants={infoVars}>
+                          <p>{tv.name}</p>
+                        </InfoTitle>
+                      </Box>
+                    ))}
+                </Row>
+              </AnimatePresence>
+            </Slider>
+          </SliderContainer>
+          <SliderContainer>
+            <Span1>T INDEX</Span1>
+            <Slider>
+              <PageChange>
+                <Decrease whileHover={{ scale: 1.2 }} onClick={decreaseIndex}>
+                  <ArrowBackIosIcon
+                    style={{ marginLeft: 20 }}
+                    fontSize="large"
+                  />
+                </Decrease>
+                <Increase whileHover={{ scale: 1.2 }} onClick={increaseIndex}>
+                  <ArrowForwardIosIcon fontSize="large" />
+                </Increase>
+              </PageChange>
+              <AnimatePresence
+                custom={isBack}
+                initial={false}
+                onExitComplete={toggleLeaving}
+              >
+                <Row
+                  custom={isBack}
+                  variants={rowVars}
+                  initial="invisible"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: "tween", duration: 1 }}
+                  key={tIndex}
+                >
+                  {aInfo?.results
+                    .slice(1)
+                    .slice(tIndex * offset + 1, tIndex * offset + offset + 1)
+                    .map((tv) => (
+                      <Box
+                        layoutId={tv.id + ""}
+                        key={tv.id}
+                        whileHover="hover"
+                        initial="normal"
+                        exit="exit"
+                        variants={boxVars}
+                        transition={{ type: "tween" }}
+                        onClick={() => onBoxClicked(tv.id)}
+                        bgphoto={
+                          makeImagePath(tv.backdrop_path, "w500") ||
+                          NothingPoster
+                        }
+                      >
+                        <InfoTitle variants={infoVars}>
+                          <p>{tv.name}</p>
+                        </InfoTitle>
+                      </Box>
+                    ))}
+                </Row>
+              </AnimatePresence>
+            </Slider>
+          </SliderContainer>
+          <SliderContainer>
+            <Span1>A INDEX</Span1>
+            <Slider>
+              <PageChange>
+                <Decrease whileHover={{ scale: 1.2 }} onClick={decreaseIndex}>
+                  <ArrowBackIosIcon
+                    style={{ marginLeft: 20 }}
+                    fontSize="large"
+                  />
+                </Decrease>
+                <Increase whileHover={{ scale: 1.2 }} onClick={increaseIndex}>
+                  <ArrowForwardIosIcon fontSize="large" />
+                </Increase>
+              </PageChange>
+              <AnimatePresence
+                custom={isBack}
+                initial={false}
+                onExitComplete={toggleLeaving}
+              >
+                <Row
+                  custom={isBack}
+                  variants={rowVars}
+                  initial="invisible"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: "tween", duration: 1 }}
+                  key={aIndex}
+                >
+                  {tInfo?.results
+                    .slice(1)
+                    .slice(aIndex * offset + 1, aIndex * offset + offset + 1)
                     .map((tv) => (
                       <Box
                         layoutId={tv.id + ""}
