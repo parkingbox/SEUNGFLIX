@@ -47,11 +47,11 @@ function Tv() {
     ["tvs", "nowPlaying"],
     getTv
   );
-  const { data: aInfo } = useQuery<IGetTvResult>(
+  const { data: aInfo } = useQuery<IGetTVResult>(
     ["tvsAir", "airPlaying"],
     getTvAir
   );
-  const { data: tInfo } = useQuery<IGetTvResult>(
+  const { data: tInfo } = useQuery<IGetTVResult>(
     ["tvsTop", "topPlaying"],
     getTvTop
   );
@@ -100,6 +100,61 @@ function Tv() {
           <PlayWrapper>
             <Overlays>{/* TV trailer */}</Overlays>
           </PlayWrapper>
+          <SliderContainer>
+            <Span1>Trending Now</Span1>
+            <Slider>
+              <PageChange>
+                <Decrease whileHover={{ scale: 1.2 }} onClick={decreaseIndex}>
+                  <ArrowBackIosIcon
+                    style={{ marginLeft: 20 }}
+                    fontSize="large"
+                  />
+                </Decrease>
+                <Increase whileHover={{ scale: 1.2 }} onClick={increaseIndex}>
+                  <ArrowForwardIosIcon fontSize="large" />
+                </Increase>
+              </PageChange>
+              <AnimatePresence
+                custom={isBack}
+                initial={false}
+                onExitComplete={toggleLeaving}
+              >
+                <Row
+                  custom={isBack}
+                  variants={rowVars}
+                  initial="invisible"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: "tween", duration: 1 }}
+                  key={index}
+                >
+                  {info?.results
+                    .slice(1)
+                    .slice(index * offset + 1, index * offset + offset + 1)
+                    .map((tv) => (
+                      <Box
+                        layoutId={tv.id + ""}
+                        key={tv.id}
+                        whileHover="hover"
+                        initial="normal"
+                        exit="exit"
+                        variants={boxVars}
+                        transition={{ type: "tween" }}
+                        onClick={() => onBoxClicked(tv.id)}
+                        bgphoto={
+                          makeImagePath(tv.backdrop_path, "w500") ||
+                          NothingPoster
+                        }
+                      >
+                        <InfoTitle variants={infoVars}>
+                          <p>{tv.name}</p>
+                        </InfoTitle>
+                      </Box>
+                    ))}
+                </Row>
+              </AnimatePresence>
+            </Slider>
+          </SliderContainer>
         </>
       )}
     </Wrapper>
