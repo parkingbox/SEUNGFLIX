@@ -21,6 +21,7 @@ import { useRecoilState } from "recoil";
 import { isSoundAtom, SoundEnums } from "../../Recoil/Atom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import MovieDetail from "../Detail/MovieDetail";
 
 const Wrapper = styled.div`
   background: black;
@@ -54,13 +55,22 @@ const Banner = styled.div`
   position: absolute;
 `;
 
+const Overlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+`;
+
 export const Overlays = styled(motion.div)`
   position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;
   top: 0;
-  left: 0%;
+  left: 0;
   width: 100%;
   height: 100%;
   background-image: linear-gradient(
@@ -73,6 +83,41 @@ export const Overlays = styled(motion.div)`
       rgba(20, 20, 20, 1) 14%,
       rgba(20, 20, 20, 0.15592174369747902) 28%
     );
+`;
+
+export const Modal = styled(motion.div)`
+  width: 50%;
+  height: 90vh;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 200;
+`;
+
+export const ModalCover = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 8px;
+    border-radius: 50px;
+    background: black;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(#e0eafc, #cfdef3);
+    border-radius: 50px;
+  }
+  border-radius: 50px 0 0 50px;
+`;
+
+export const MovieCover = styled(motion.div)<{ bgphoto?: string }>`
+  width: 100%;
+  height: 50%;
+  background-image: url(${(props) => props.bgphoto});
+  background-size: cover;
+  background-position: center;
 `;
 
 export const PageChange = styled.div`
@@ -231,8 +276,9 @@ export const infoVars = {
 
 function Movies() {
   const navigate = useNavigate();
+  const { scrollY } = useScroll();
   const stateMovieId = localStorage.getItem("movieId");
-
+  const ModalMatch = useMatch("/movies/:movieId");
   //API
   const { isLoading: infoLoading, data: info } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
@@ -251,10 +297,10 @@ function Movies() {
     getMoviesWeek
   );
 
-  const { data: trailer } = useQuery<IGetMoviesTrailer>(
-    ["startMovieTrailer"],
-    () => getMoviesTrailer(String(stateMovieId))
-  );
+  // const { data: trailer } = useQuery<IGetMoviesTrailer>(
+  //   ["startMovieTrailer"],
+  //   () => getMoviesTrailer(String(stateMovieId))
+  // );
   const { data: logo } = useQuery<IGetMovieImages>(["movieLogo"], () =>
     getMovieImages(String(stateMovieId))
   );
@@ -269,6 +315,10 @@ function Movies() {
   const [tIndex, setTIndex] = useState(0);
   const [wIndex, setWIndex] = useState(0);
 
+  //boolean's
+  const [pDex, setPDex] = useState(false);
+  const [tDex, setTDex] = useState(false);
+  const [wDex, setWDex] = useState(false);
   let offset = 6;
   //Index of Movie box
   const increaseIndex = () => {
@@ -342,7 +392,7 @@ function Movies() {
       if (leaving) return;
       toggleLeaving();
       setIsBack(false);
-      const totalMovies = wInfo.results.length - 1 ;
+      const totalMovies = wInfo.results.length - 1;
       const maxIndex = Math.floor(totalMovies / offset) - 1;
       setWIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
@@ -360,10 +410,46 @@ function Movies() {
   };
 
   const toggleLeaving = () => setLeaving((prev) => !prev);
+
+  // Modal movie click
   const onBoxClicked = (movieId: number) => {
     navigate(`/movies/${movieId}`);
     setIsVolum(true);
   };
+  const clickedMovie =
+    ModalMatch?.params.movieId &&
+    info?.results.find((movie) => movie.id + "" === ModalMatch.params.movieId);
+  const clickedPMovie =
+    ModalMatch?.params.movieId &&
+    pInfo?.results.find((movie) => movie.id + "" === ModalMatch.params.movieId);
+  const clickedTMovie =
+    ModalMatch?.params.movieId &&
+    tInfo?.results.find((movie) => movie.id + "" === ModalMatch.params.movieId);
+  const clickedWMovie =
+    ModalMatch?.params.movieId &&
+    wInfo?.results.find((movie) => movie.id + "" === ModalMatch.params.movieId);
+  const onOverlayClicked = () => {
+    navigate(`/movies`);
+    setIsVolum(false);
+
+    if (pDex === true) {
+      setPDex((prev) => !prev);
+    }
+    if (tDex === true) {
+      setTDex((prev) => !prev);
+    }
+    if (wDex === true) {
+      setWDex((prev) => !prev);
+    }
+  };
+
+  const ModalID = pDex
+    ? ModalMatch?.params.movieId + "p"
+    : tDex
+    ? ModalMatch?.params.movieId + "t"
+    : wDex
+    ? ModalMatch?.params.movieId + "w"
+    : ModalMatch?.params.movieId;
 
   return (
     <Wrapper>
@@ -379,28 +465,46 @@ function Movies() {
             <Slider>
               <PageChange>
                 <Decrease whileHover={{ scale: 1.2 }} onClick={decreaseIndex}>
-                  <ArrowBackIosIcon style={{ marginLeft: 20 }} fontSize="large" />
+                  <ArrowBackIosIcon
+                    style={{ marginLeft: 20 }}
+                    fontSize="large"
+                  />
                 </Decrease>
                 <Increase whileHover={{ scale: 1.2 }} onClick={increaseIndex}>
                   <ArrowForwardIosIcon fontSize="large" />
                 </Increase>
               </PageChange>
-              <AnimatePresence custom={isBack} initial={false} onExitComplete={toggleLeaving}>
-                <Row custom={isBack} variants={rowVars} initial="invisible" animate="visible" exit="exit" transition={{ type: "tween", duration: 1 }} key={index}>
+              <AnimatePresence
+                custom={isBack}
+                initial={false}
+                onExitComplete={toggleLeaving}
+              >
+                <Row
+                  custom={isBack}
+                  variants={rowVars}
+                  initial="invisible"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: "tween", duration: 1 }}
+                  key={index}
+                >
                   {info?.results
                     .slice(1)
                     .slice(index * offset + 1, index * offset + offset + 1)
                     .map((movie) => (
                       <Box
                         layoutId={movie.id + ""}
+                        onClick={() => onBoxClicked(movie.id)}
                         key={movie.id}
                         whileHover="hover"
                         initial="normal"
                         exit="exit"
                         variants={boxVars}
                         transition={{ type: "tween" }}
-                        onClick={() => onBoxClicked(movie.id)}
-                        bgphoto={makeImagePath(movie.backdrop_path, "w500") || NothingPoster}
+                        bgphoto={
+                          makeImagePath(movie.backdrop_path, "w500") ||
+                          NothingPoster
+                        }
                       >
                         <InfoTitle variants={infoVars}>
                           <p>{movie.title}</p>
@@ -520,6 +624,29 @@ function Movies() {
               </AnimatePresence>
             </Slider>
           </SliderContainer>
+          <AnimatePresence>
+            {ModalMatch ? (
+              <>
+                <Overlay
+                  onClick={onOverlayClicked}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                />
+                <Modal style={{ top: scrollY.get() + 100 }} layoutId={ModalID}>
+                  {(clickedMovie ||
+                    clickedPMovie ||
+                    clickedTMovie ||
+                    clickedWMovie) && (
+                    <>
+                      <ModalCover>
+                        <MovieDetail />
+                      </ModalCover>
+                    </>
+                  )}
+                </Modal>
+              </>
+            ) : null}
+          </AnimatePresence>
         </>
       )}
     </Wrapper>

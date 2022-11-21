@@ -11,7 +11,7 @@ import {
   IGetMoviesTrailer,
 } from "../../Api/api";
 import { makeImagePath, NothingPoster } from "../../Api/utils";
-import { DetailBox } from "../Upcoming/UpcomingDetail";
+import { DetailBox } from "./UpcomingDetail";
 import Loading from "../../Styles/Loading";
 import { useState } from "react";
 import { Stack } from "@mui/material";
@@ -72,6 +72,7 @@ const ReleaseContainer = styled.div`
 function MovieDetail() {
   const movieMatch = useMatch(`/movies/:movieId`);
   const navigate = useNavigate();
+  const [volum, setVolum] = useState(false);
   const { isLoading, data } = useQuery<IGetMoviesTrailer>(
     ["Movietrailer"],
     () => getMoviesTrailer(movieMatch?.params.movieId)

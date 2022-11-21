@@ -126,7 +126,6 @@ export interface IGetSearchResult {
   total_results: number;
 }
 
-
 //MOVIE API
 export const getMovies = async () => {
   const response = await fetch(
@@ -136,17 +135,23 @@ export const getMovies = async () => {
 };
 
 export const getMoviesPopular = async () => {
-  const response = await fetch(`${BASE_PATH}/movie/popular?api_key=${API_KEY}&page=2`);
+  const response = await fetch(
+    `${BASE_PATH}/movie/popular?api_key=${API_KEY}&page=2`
+  );
   return await response.json();
 };
 
 export const getMoviesTop = async () => {
-  const response = await fetch(`${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&page=1`);
+  const response = await fetch(
+    `${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&page=1`
+  );
   return await response.json();
 };
 
 export const getMoviesWeek = async () => {
-  const response = await fetch(`${BASE_PATH}/trending/movie/week?api_key=${API_KEY}&page=1`);
+  const response = await fetch(
+    `${BASE_PATH}/trending/movie/week?api_key=${API_KEY}&page=1`
+  );
   return await response.json();
 };
 
@@ -194,12 +199,16 @@ export const getTv = async () => {
 };
 
 export const getTvTop = async () => {
-  const response = await fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&page=1`);
+  const response = await fetch(
+    `${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&page=1`
+  );
   return await response.json();
 };
 
 export const getTvAir = async () => {
-  const response = await fetch(`${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&page=2`);
+  const response = await fetch(
+    `${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&page=2`
+  );
   return await response.json();
 };
 
@@ -223,5 +232,3 @@ export const getSearch = async (query?: string) => {
   );
   return await response.json();
 };
-
-

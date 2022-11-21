@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll } from "framer-motion";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import { getTv, getTvAir, getTvTop, IGetTVResult } from "../../Api/api";
@@ -17,12 +17,15 @@ import {
   boxVars,
   infoVars,
   Overlays,
+  Modal,
+  ModalCover,
 } from "../Movie/Movie";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMatch, useNavigate } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { makeImagePath, NothingPoster } from "../../Api/utils";
+import TvDetail from "../Detail/TvDetail";
 
 const Wrapper = styled.div`
   min-width: 1400px;
@@ -41,6 +44,8 @@ const PlayWrapper = styled.div`
 
 function Tv() {
   const navigate = useNavigate();
+  const ModalMatch = useMatch("/tv/:tvId");
+  const { scrollY } = useScroll();
   const stateTvId = localStorage.getItem("tvId");
 
   const { data: info, isLoading: infoLoading } = useQuery<IGetTVResult>(
@@ -63,6 +68,9 @@ function Tv() {
   const [index, setIndex] = useState(0);
   const [aIndex, setAIndex] = useState(0);
   const [tIndex, setTIndex] = useState(0);
+
+  const [aDex, setADex] = useState(false);
+  const [tDex, setTDex] = useState(false);
 
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (tvId: number) => {
@@ -90,6 +98,34 @@ function Tv() {
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
+
+  const onOverlayClicked = () => {
+    navigate(`/tv`);
+    setIsVolum(false);
+    if (aDex === true) {
+      setADex((prev) => !prev);
+    }
+    if (tDex === true) {
+      setTDex((prev) => !prev);
+    }
+  };
+
+  const clickedTv =
+    ModalMatch?.params.tvId &&
+    info?.results.find((tv) => tv.id + "" === ModalMatch.params.tvId);
+  const clickedATv =
+    ModalMatch?.params.tvId &&
+    aInfo?.results.find((tv) => tv.id + "" === ModalMatch.params.tvId);
+  const clickedTTv =
+    ModalMatch?.params.tvId &&
+    tInfo?.results.find((tv) => tv.id + "" === ModalMatch.params.tvId);
+
+  const ModalID = aDex
+    ? ModalMatch?.params.tvId + "a"
+    : tDex
+    ? ModalMatch?.params.tvId + "t"
+    : ModalMatch?.params.tvId;
+
   return (
     <Wrapper>
       {infoLoading ? (
@@ -264,6 +300,26 @@ function Tv() {
               </AnimatePresence>
             </Slider>
           </SliderContainer>
+          <AnimatePresence>
+            {ModalMatch ? (
+              <>
+                <Overlays
+                  onClick={onOverlayClicked}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                />
+                <Modal style={{ top: scrollY.get() + 100 }} layoutId={ModalID}>
+                  {(clickedTv || clickedATv || clickedTTv) && (
+                    <>
+                      <ModalCover>
+                        <TvDetail />
+                      </ModalCover>
+                    </>
+                  )}
+                </Modal>
+              </>
+            ) : null}
+          </AnimatePresence>
         </>
       )}
     </Wrapper>
