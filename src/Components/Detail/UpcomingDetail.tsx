@@ -572,21 +572,6 @@ const BannerVolum = styled.button`
   position: absolute;
 `;
 
-export const MiniTrailerBox = styled.div`
-  width: 100%;
-  height: 35%;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-`;
-
-export const MiniTrailer = styled.div`
-  width: 95%;
-  height: 95%;
-  display: flex;
-  overflow: hidden;
-`;
-
 const UpcomingDetail = () => {
   const [volum, setVolum] = useState(false);
   const upcomingMatch = useMatch(`/upcoming/:upcomingId`);
@@ -693,31 +678,6 @@ const UpcomingDetail = () => {
                         {volum ? <VolumeUpIcon /> : <VolumeOffIcon />}
                       </BannerVolum>
                     </TrailerBox>
-                    <MiniTrailerBox>
-                      {data.results === null ? (
-                        <Loading />
-                      ) : (
-                        <MiniTrailer>
-                          {data?.results === undefined ? (
-                            <Loading />
-                          ) : (
-                            data.results.slice(1, 6).map((trailer) => {
-                              return (
-                                <ReactPlayer
-                                  key={trailer.id}
-                                  url={makeVideoPath(trailer.key)}
-                                  volume={0}
-                                  controls={true}
-                                  playing={false}
-                                  width="20%"
-                                  height="100%"
-                                ></ReactPlayer>
-                              );
-                            })
-                          )}
-                        </MiniTrailer>
-                      )}
-                    </MiniTrailerBox>
                   </TrailerContainer>
                 </DetailBox>
               </DetailContainer>
