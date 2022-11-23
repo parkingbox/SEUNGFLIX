@@ -7,6 +7,7 @@ import Movie from "../Components/Movie/Movie";
 import { ReactQueryDevtools } from "react-query/devtools";
 import Upcoming from "../Components/Upcoming/Upcoming";
 import Movies from "../Components/Movie/Movie";
+import UpcomingDetail from "../Components/Detail/UpcomingDetail";
 
 function Router() {
   return (
@@ -21,7 +22,7 @@ function Router() {
           <Route path=":tvId" element={<Tv />} />
         </Route>
         <Route path="/upcoming" element={<Upcoming />} />
-        <Route path="/upcoming/:upcomingId" element={<Upcoming />} />
+        <Route path="/upcoming/:upcomingId" element={<UpcomingDetail />} />
         <Route path="/search/*" element={<Search />} />
       </Routes>
     </HashRouter>

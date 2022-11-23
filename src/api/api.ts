@@ -185,7 +185,7 @@ export const getMovieSimilar = async (movieId?: string) => {
 
 export const getUpcoming = async (number?: number) => {
   const response = await fetch(
-    `${BASE_PATH}/tv/popular?api_key=${API_KEY}&page=${number}`
+    `${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&page=${number}`
   );
   return await response.json();
 };
