@@ -16,6 +16,11 @@ export interface IMovie {
   release_date: string;
   vote_average: string;
 }
+interface IMovieTrailer {
+  key: string;
+  id: string;
+  type: string;
+}
 
 export interface ITv {
   id: number;
@@ -28,14 +33,11 @@ export interface ITv {
   first_air_date: string;
 }
 
-interface IMovieTrailer {
-  key: string;
-  id: string;
-}
 
 interface ITVTrailer {
   key: string;
   id: string;
+  type: string;
 }
 interface ISearch {
   backdrop_path: string;
@@ -92,16 +94,26 @@ export interface IGetTVResult {
   results: ITv[];
 }
 
-export interface IGetTVDetail {
+export interface IGetTvDetail {
   adult: boolean;
   backdrop_path: string;
-  homepage: string;
-  id: number;
-  original_name: string;
+  name: string;
   overview: string;
-  poster_path: string;
   first_air_date: string;
+  runtime: number;
   vote_average: number;
+  genres: IGenres[];
+  episode_run_time: string;
+  production_companies: ICompanies[];
+  spoken_languages: ILanguages[];
+  id: number;
+  number_of_episodes: string;
+  number_of_seasons: string;
+}
+export interface ITvSimilar {
+  backdrop_path: string;
+  name: string;
+  id: number;
 }
 
 export interface IMoiveSimilar {
@@ -109,8 +121,12 @@ export interface IMoiveSimilar {
   original_title: string;
 }
 
+
 export interface IGetTVTrailer {
   results: ITVTrailer[];
+}
+export interface IGetTvSimilar {
+  results: ITvSimilar[];
 }
 
 export interface IGetMovieSimilar {
@@ -223,6 +239,10 @@ export const getTvTrailer = async (tvId?: string) => {
   const response = await fetch(
     `${BASE_PATH}/tv/${tvId}/videos?api_key=${API_KEY}`
   );
+  return await response.json();
+};
+export const getTvSimilar = async (tvId?: string) => {
+  const response = await fetch(`${BASE_PATH}/tv/${tvId}/similar?api_key=${API_KEY}&page=1`);
   return await response.json();
 };
 

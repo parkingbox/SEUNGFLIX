@@ -15,17 +15,34 @@ import {
   getMoviesWeek,
 } from "../../Api/api";
 import Loading from "../../Styles/Loading";
-import { makeImagePath, NothingPoster } from "../../Api/utils";
+import { makeImagePath, makeVideoPath, NothingPoster } from "../../Api/utils";
 import ReactPlayer from "react-player";
 import { useRecoilState } from "recoil";
 import { isSoundAtom, SoundEnums } from "../../Recoil/Atom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import MovieDetail from "../Detail/MovieDetail";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faVolumeHigh,
+  faVolumeMute,
+  faInfoCircle,
+  faPlay,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Wrapper = styled.div`
   background: black;
   height: 100%;
+  background-image: linear-gradient(
+      0deg,
+      rgba(20, 20, 20, 0.1643251050420168) 85%,
+      rgba(20, 20, 20, 1) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(20, 20, 20, 1) 14%,
+      rgba(20, 20, 20, 0.15592174369747902) 28%
+    );
 `;
 const PlayWrapper = styled.div`
   min-width: 100%;
@@ -37,22 +54,16 @@ const PlayWrapper = styled.div`
   overflow: hidden;
 `;
 
-const Title = styled(motion.img)`
-  width: 30%;
-  margin-left: 20px;
-  margin-bottom: 20px;
-  padding: 0 20px;
-`;
-
-const Banner = styled.div`
+const Banner = styled.div<{ bgphoto: string }>`
+  height: 100vh;
   width: 100%;
-  height: 80vh;
-  bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  color: white;
-  position: absolute;
+  padding: 60px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
+    url(${(props) => props.bgphoto});
+  background-size: cover;
 `;
 
 const Overlay = styled(motion.div)`
@@ -83,6 +94,16 @@ export const Overlays = styled(motion.div)`
       rgba(20, 20, 20, 1) 14%,
       rgba(20, 20, 20, 0.15592174369747902) 28%
     );
+`;
+
+const Title = styled.h2`
+  font-size: 68px;
+  margin-bottom: 20px; ;
+`;
+
+const Overview = styled.p`
+  font-size: 30px;
+  width: 50%;
 `;
 
 export const Modal = styled(motion.div)`
@@ -137,6 +158,7 @@ export const Increase = styled(motion.div)`
   align-items: center;
   z-index: 3;
   transform-origin: center left;
+  top: 100px;
 `;
 
 export const Decrease = styled(motion.div)`
@@ -148,6 +170,7 @@ export const Decrease = styled(motion.div)`
   z-index: 3;
   opacity: 0.7;
   transform-origin: center left;
+  top: 100px;
 `;
 
 export const Span1 = styled(motion.span)`
@@ -273,6 +296,30 @@ export const infoVars = {
     },
   },
 };
+const descVars = {
+  animate: {
+    opacity: 0,
+    transition: {
+      delay: 5,
+      duration: 0.5,
+    },
+  },
+};
+
+const btnVars = {
+  animate: {
+    opacity: 1,
+    transition: {
+      delay: 6,
+    },
+  },
+};
+
+const hoverVars = {
+  hover: {
+    opacity: 0.7,
+  },
+};
 
 function Movies() {
   const navigate = useNavigate();
@@ -296,11 +343,9 @@ function Movies() {
     ["wMovies", "wNowPlaying"],
     getMoviesWeek
   );
-
-  // const { data: trailer } = useQuery<IGetMoviesTrailer>(
-  //   ["startMovieTrailer"],
-  //   () => getMoviesTrailer(String(stateMovieId))
-  // );
+  const { data: trailer } = useQuery<IGetMoviesTrailer>(["startTrailer"], () =>
+    getMoviesTrailer(String(stateMovieId))
+  );
   const { data: logo } = useQuery<IGetMovieImages>(["movieLogo"], () =>
     getMovieImages(String(stateMovieId))
   );
@@ -319,7 +364,23 @@ function Movies() {
   const [pDex, setPDex] = useState(false);
   const [tDex, setTDex] = useState(false);
   const [wDex, setWDex] = useState(false);
+  const [lowR, setLowR] = useState(false);
+
   let offset = 6;
+
+  const [isSound, setIsSound] = useRecoilState<SoundEnums>(isSoundAtom);
+  const { OFF, ON } = SoundEnums;
+
+  const handleChangeSound = useCallback((): void => {
+    if (isSound === OFF) {
+      localStorage.setItem("sound", ON);
+      setIsSound(ON);
+      return;
+    }
+    localStorage.setItem("sound", OFF);
+    setIsSound(OFF);
+  }, [OFF, ON, isSound, setIsSound]);
+
   //Index of Movie box
   const increaseIndex = () => {
     if (info) {
@@ -458,7 +519,12 @@ function Movies() {
       ) : (
         <>
           <PlayWrapper>
-            <Overlays>{/* movie trailer */}</Overlays>
+            <Banner
+              bgphoto={makeImagePath(info?.results[0].backdrop_path || "")}
+            >
+              <Title>{info?.results[0].title}</Title>
+              <Overview>{info?.results[0].overview}</Overview>
+            </Banner>
           </PlayWrapper>
           <SliderContainer>
             <Span1>Trending Now</Span1>
@@ -489,8 +555,7 @@ function Movies() {
                   key={index}
                 >
                   {info?.results
-                    .slice(1)
-                    .slice(index * offset + 1, index * offset + offset + 1)
+                    .slice(index * offset, index * offset + offset)
                     .map((movie) => (
                       <Box
                         layoutId={movie.id + ""}
@@ -520,14 +585,29 @@ function Movies() {
             <Slider>
               <PageChange>
                 <Decrease whileHover={{ scale: 1.2 }} onClick={decreasePIndex}>
-                  <ArrowBackIosIcon style={{ marginLeft: 20 }} fontSize="large" />
+                  <ArrowBackIosIcon
+                    style={{ marginLeft: 20 }}
+                    fontSize="large"
+                  />
                 </Decrease>
                 <Increase whileHover={{ scale: 1.2 }} onClick={increasePIndex}>
                   <ArrowForwardIosIcon fontSize="large" />
                 </Increase>
               </PageChange>
-              <AnimatePresence custom={isBack} initial={false} onExitComplete={toggleLeaving}>
-                <Row custom={isBack} variants={rowVars} initial="invisible" animate="visible" exit="exit" transition={{ type: "tween", duration: 1 }} key={pIndex}>
+              <AnimatePresence
+                custom={isBack}
+                initial={false}
+                onExitComplete={toggleLeaving}
+              >
+                <Row
+                  custom={isBack}
+                  variants={rowVars}
+                  initial="invisible"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: "tween", duration: 1 }}
+                  key={pIndex}
+                >
                   {pInfo?.results
                     .slice(pIndex * offset + 1, pIndex * offset + offset + 1)
                     .map((movie) => (
@@ -540,7 +620,10 @@ function Movies() {
                         variants={boxVars}
                         transition={{ type: "tween" }}
                         onClick={() => onBoxClicked(movie.id)}
-                        bgphoto={makeImagePath(movie.backdrop_path, "w500") || NothingPoster}
+                        bgphoto={
+                          makeImagePath(movie.backdrop_path, "w500") ||
+                          NothingPoster
+                        }
                       >
                         <InfoTitle variants={infoVars}>
                           <p>{movie.title}</p>
@@ -556,14 +639,29 @@ function Movies() {
             <Slider>
               <PageChange>
                 <Decrease whileHover={{ scale: 1.2 }} onClick={decreaseWIndex}>
-                  <ArrowBackIosIcon style={{ marginLeft: 20 }} fontSize="large" />
+                  <ArrowBackIosIcon
+                    style={{ marginLeft: 20 }}
+                    fontSize="large"
+                  />
                 </Decrease>
                 <Increase whileHover={{ scale: 1.2 }} onClick={increaseWIndex}>
                   <ArrowForwardIosIcon fontSize="large" />
                 </Increase>
               </PageChange>
-              <AnimatePresence custom={isBack} initial={false} onExitComplete={toggleLeaving}>
-                <Row custom={isBack} variants={rowVars} initial="invisible" animate="visible" exit="exit" transition={{ type: "tween", duration: 1 }} key={wIndex}>
+              <AnimatePresence
+                custom={isBack}
+                initial={false}
+                onExitComplete={toggleLeaving}
+              >
+                <Row
+                  custom={isBack}
+                  variants={rowVars}
+                  initial="invisible"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: "tween", duration: 1 }}
+                  key={wIndex}
+                >
                   {wInfo?.results
                     .slice(wIndex * offset + 1, wIndex * offset + offset + 1)
                     .map((movie) => (
@@ -576,7 +674,10 @@ function Movies() {
                         variants={boxVars}
                         transition={{ type: "tween" }}
                         onClick={() => onBoxClicked(movie.id)}
-                        bgphoto={makeImagePath(movie.backdrop_path, "w500") || NothingPoster}
+                        bgphoto={
+                          makeImagePath(movie.backdrop_path, "w500") ||
+                          NothingPoster
+                        }
                       >
                         <InfoTitle variants={infoVars}>
                           <p>{movie.title}</p>
@@ -592,14 +693,29 @@ function Movies() {
             <Slider>
               <PageChange>
                 <Decrease whileHover={{ scale: 1.2 }} onClick={decreaseTIndex}>
-                  <ArrowBackIosIcon style={{ marginLeft: 20 }} fontSize="large" />
+                  <ArrowBackIosIcon
+                    style={{ marginLeft: 20 }}
+                    fontSize="large"
+                  />
                 </Decrease>
                 <Increase whileHover={{ scale: 1.2 }} onClick={increaseTIndex}>
                   <ArrowForwardIosIcon fontSize="large" />
                 </Increase>
               </PageChange>
-              <AnimatePresence custom={isBack} initial={false} onExitComplete={toggleLeaving}>
-                <Row custom={isBack} variants={rowVars} initial="invisible" animate="visible" exit="exit" transition={{ type: "tween", duration: 1 }} key={tIndex}>
+              <AnimatePresence
+                custom={isBack}
+                initial={false}
+                onExitComplete={toggleLeaving}
+              >
+                <Row
+                  custom={isBack}
+                  variants={rowVars}
+                  initial="invisible"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: "tween", duration: 1 }}
+                  key={tIndex}
+                >
                   {tInfo?.results
                     .slice(1)
                     .slice(tIndex * offset + 1, tIndex * offset + offset + 1)
@@ -613,7 +729,10 @@ function Movies() {
                         variants={boxVars}
                         transition={{ type: "tween" }}
                         onClick={() => onBoxClicked(movie.id)}
-                        bgphoto={makeImagePath(movie.backdrop_path, "w500") || NothingPoster}
+                        bgphoto={
+                          makeImagePath(movie.backdrop_path, "w500") ||
+                          NothingPoster
+                        }
                       >
                         <InfoTitle variants={infoVars}>
                           <p>{movie.title}</p>
