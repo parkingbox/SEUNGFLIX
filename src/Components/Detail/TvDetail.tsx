@@ -177,19 +177,6 @@ const Title = styled.span`
   font-size: 40px;
 `;
 
-const PlayBtn = styled.button`
-  font-size: 30px;
-  font-weight: 600;
-  border-radius: 10px;
-  margin-left: 40px;
-  border: 0;
-  background-color: transparent;
-  cursor: pointer;
-  svg {
-    color: ${(props) => props.theme.white.darker};
-  }
-`;
-
 const Explanation = styled.div`
   width: 95%;
   height: 100px;
