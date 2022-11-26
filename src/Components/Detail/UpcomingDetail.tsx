@@ -15,9 +15,11 @@ import Loading from "../../Styles/Loading";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import SendIcon from "@mui/icons-material/Send";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Error from "../../Styles/Error";
 import { Helmet } from "react-helmet";
+import { motion } from "framer-motion";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export const Body = styled.div`
   width: 100%;
@@ -192,17 +194,43 @@ export const TrailerBox = styled.div`
   align-items: center;
 `;
 
-const Back = styled.div`
-  margin: auto;
-`;
-
-const BannerVolum = styled.button`
+const BannerVolum = styled(motion.button)`
   width: 40px;
   height: 40px;
   border-radius: 50%;
   border: 0;
   background-color: #9ca7b2;
+  cursor: pointer;
   position: absolute;
+  right: 220px;
+  top: 67px;
+`;
+const BannerFooterBox = styled.footer`
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+`;
+
+const BannerFooter = styled.footer`
+  width: 95%;
+  height: 50px;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const BannerBtn = styled(motion.button)`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 0;
+  background-color: #9ca7b2;
+  margin-top: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  &:last-child {
+    margin-left: 10px;
+  }
 `;
 
 const UpcomingDetail = () => {
@@ -256,16 +284,22 @@ const UpcomingDetail = () => {
                       <Title>
                         <span>{info?.original_title}</span>
                       </Title>
-                      <Back>
-                          <KeyboardBackspaceIcon
+                      <BannerFooterBox>
+                        <BannerFooter>
+                          <BannerVolum
+                            onClick={volumClick}
+                            whileHover={{ scale: 1.2 }}
+                          >
+                            {volum ? <VolumeUpIcon /> : <VolumeOffIcon />}
+                          </BannerVolum>
+                          <BannerBtn
                             onClick={onClick}
-                            style={{
-                              width: "30px",
-                              height: "30px",
-                              cursor: "pointer",
-                            }}
-                          />
-                        </Back>
+                            whileHover={{ rotate: "90deg" }}
+                          >
+                            <FontAwesomeIcon icon={faXmark} />
+                          </BannerBtn>
+                        </BannerFooter>
+                      </BannerFooterBox>
                     </TitleBox>
                     <OverviewBox>
                       <Overview>
@@ -309,9 +343,6 @@ const UpcomingDetail = () => {
                         width="180%"
                         height="180%"
                       ></ReactPlayer>
-                      <BannerVolum onClick={volumClick}>
-                        {volum ? <VolumeUpIcon /> : <VolumeOffIcon />}
-                      </BannerVolum>
                     </TrailerBox>
                   </TrailerContainer>
                 </DetailBox>
