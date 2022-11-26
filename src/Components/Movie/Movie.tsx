@@ -518,14 +518,12 @@ function Movies() {
         <Loading />
       ) : (
         <>
-          <PlayWrapper>
             <Banner
               bgphoto={makeImagePath(info?.results[0].backdrop_path || "")}
             >
               <Title>{info?.results[0].title}</Title>
               <Overview>{info?.results[0].overview}</Overview>
             </Banner>
-          </PlayWrapper>
           <SliderContainer>
             <Span1>Trending Now</Span1>
             <Slider>
