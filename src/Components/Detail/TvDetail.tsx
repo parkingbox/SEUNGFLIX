@@ -396,9 +396,6 @@ const TvDetail = () => {
                   <HomeDivider>
                     <TitleContainer>
                       <Title>{info?.name}</Title>
-                      <PlayBtn onClick={() => alert("Please Sign in first.")}>
-                        <FontAwesomeIcon icon={faPlayCircle} />
-                      </PlayBtn>
                     </TitleContainer>
                     <ReleaseContainer>
                       <span>{info?.first_air_date} / </span>
