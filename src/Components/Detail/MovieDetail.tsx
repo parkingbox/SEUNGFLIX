@@ -168,6 +168,13 @@ import Stack from "@mui/material/Stack";
 import Rating from "@mui/material/Rating";
 import Loading from "../../Styles/Loading";
 import { InfoTitle, infoVars } from "../Movie/Movie";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faVolumeHigh,
+  faVolumeMute,
+  faPlayCircle,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Container = styled(motion.div)`
   font-family: "Raleway Sans";
@@ -515,13 +522,13 @@ const MovieDetail = () => {
                   <BannerFooterBox>
                     <BannerFooter>
                       <BannerBtn onClick={volumClick}>
-                        {/* <FontAwesomeIcon icon={volum ? faVolumeHigh : faVolumeMute} /> */}
+                        <FontAwesomeIcon icon={volum ? faVolumeHigh : faVolumeMute} />
                       </BannerBtn>
                       <BannerBtn
                         onClick={onClicked}
                         whileHover={{ rotate: "90deg" }}
                       >
-                        {/* <FontAwesomeIcon icon={faXmark} /> */}
+                        <FontAwesomeIcon icon={faXmark} />
                       </BannerBtn>
                     </BannerFooter>
                   </BannerFooterBox>
