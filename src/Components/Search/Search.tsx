@@ -9,7 +9,6 @@ import Loading from "../../Styles/Loading";
 import NoResult from "../../Styles/NoResult";
 
 const Body = styled.div`
-  font-family: "Raleway Sans";
   width: 100%;
   height: 100%;
   position: relative;
@@ -39,7 +38,11 @@ const Box = styled(motion.div)<{ bgphoto: string }>`
 const DetailBox = styled(motion.div)`
   width: 100%;
   height: 100%;
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0.3),
+    rgba(0, 0, 0, 0.7)
+  );
   border-radius: 10px;
   opacity: 0;
   display: flex;
@@ -89,7 +92,9 @@ const Title = styled.div``;
 const Search = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search).get("query");
-  const { data, isLoading } = useQuery<IGetSearchResult>(["search"], () => getSearch(query + ""));
+  const { isLoading, data } = useQuery<IGetSearchResult>(["search"], () =>
+    getSearch(query + "")
+  );
   return (
     <>
       {isLoading ? (
@@ -102,15 +107,28 @@ const Search = () => {
           ) : (
             <>
               <Body>
-                <Container variants={container} initial="hidden" animate="visible">
+                <Container
+                  variants={container}
+                  initial="hidden"
+                  animate="visible"
+                >
                   {data?.results.map((info, index) => {
                     if (info.media_type === "movie") {
                       return (
                         <Link key={index} to={`/upcoming/${info.id}`}>
-                          <Box variants={item} bgphoto={info.backdrop_path === null ? NothingPoster : makeImagePath(info.backdrop_path || info.poster_path)}>
+                          <Box
+                            variants={item}
+                            bgphoto={
+                              info.backdrop_path === null
+                                ? NothingPoster
+                                : makeImagePath(
+                                    info.backdrop_path || info.poster_path
+                                  )
+                            }
+                          >
                             <DetailBox whileHover={{ opacity: 1 }}>
+                              <TitleBox>{info.original_title}</TitleBox>
                               <FooterBox>
-                                <Title>{info.original_title}</Title>
                                 <Average>⭐{info.vote_average}</Average>
                               </FooterBox>
                             </DetailBox>
@@ -120,7 +138,16 @@ const Search = () => {
                     } else if (info.media_type === "tv") {
                       return (
                         <Link key={index} to={`/tv/${info.id}`}>
-                          <Box variants={item} bgphoto={info.backdrop_path === null ? NothingPoster : makeImagePath(info.backdrop_path || info.poster_path)}>
+                          <Box
+                            variants={item}
+                            bgphoto={
+                              info.backdrop_path === null
+                                ? NothingPoster
+                                : makeImagePath(
+                                    info.backdrop_path || info.poster_path
+                                  )
+                            }
+                          >
                             <DetailBox whileHover={{ opacity: 1 }}>
                               <TitleBox>{info.name}</TitleBox>
                               <FooterBox>

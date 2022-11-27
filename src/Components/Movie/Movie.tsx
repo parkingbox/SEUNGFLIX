@@ -33,25 +33,7 @@ import {
 const Wrapper = styled.div`
   background: black;
   height: 100%;
-  background-image: linear-gradient(
-      0deg,
-      rgba(20, 20, 20, 0.1643251050420168) 85%,
-      rgba(20, 20, 20, 1) 100%
-    ),
-    linear-gradient(
-      0deg,
-      rgba(20, 20, 20, 1) 14%,
-      rgba(20, 20, 20, 0.15592174369747902) 28%
-    );
-`;
-const PlayWrapper = styled.div`
-  min-width: 100%;
-  height: 80vh;
-  background-color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+
 `;
 
 const Banner = styled.div<{ bgphoto: string }>`
@@ -84,16 +66,6 @@ export const Overlays = styled(motion.div)`
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: linear-gradient(
-      0deg,
-      rgba(20, 20, 20, 0.1643251050420168) 85%,
-      rgba(20, 20, 20, 1) 100%
-    ),
-    linear-gradient(
-      0deg,
-      rgba(20, 20, 20, 1) 14%,
-      rgba(20, 20, 20, 0.15592174369747902) 28%
-    );
 `;
 
 const Title = styled.h2`
@@ -518,12 +490,10 @@ function Movies() {
         <Loading />
       ) : (
         <>
-            <Banner
-              bgphoto={makeImagePath(info?.results[0].backdrop_path || "")}
-            >
-              <Title>{info?.results[0].title}</Title>
-              <Overview>{info?.results[0].overview}</Overview>
-            </Banner>
+          <Banner bgphoto={makeImagePath(info?.results[0].backdrop_path || "")}>
+            <Title>{info?.results[0].title}</Title>
+            <Overview>{info?.results[0].overview}</Overview>
+          </Banner>
           <SliderContainer>
             <Span1>Trending Now</Span1>
             <Slider>

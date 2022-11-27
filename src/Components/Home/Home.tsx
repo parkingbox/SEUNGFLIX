@@ -249,7 +249,7 @@ const Home = () => {
         <Body>
           <HelmetProvider>
             <Helmet>
-              <title>Seungflix</title>
+              <title>SEUNGFLIX</title>
             </Helmet>
           </HelmetProvider>
           <MainContainer>
@@ -389,8 +389,10 @@ const Home = () => {
                   </h1>
                   <h4>
                     자기만의 공간에서 좋아하는 캐릭터와
-                    <br />즐기는 신나는 모험. 자녀에게 이 특별한 경험을 선물하세요
-                    <br />넷플릭스 회원이라면 무료입니다.
+                    <br />
+                    즐기는 신나는 모험. 자녀에게 이 특별한 경험을 선물하세요
+                    <br />
+                    넷플릭스 회원이라면 무료입니다.
                   </h4>
                 </div>
               </TextContainer>

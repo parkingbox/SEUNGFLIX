@@ -3,23 +3,6 @@ import { useQuery } from "react-query";
 import styled from "styled-components";
 import { getTv, getTvAir, getTvTop, IGetTVResult } from "../../Api/api";
 import Loading from "../../Styles/Loading";
-import {
-  Decrease,
-  Increase,
-  InfoTitle,
-  PageChange,
-  Row,
-  Box,
-  rowVars,
-  Slider,
-  SliderContainer,
-  Span1,
-  boxVars,
-  infoVars,
-  Overlays,
-  Modal,
-  ModalCover,
-} from "../Movie/Movie";
 import { useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
@@ -28,18 +11,8 @@ import { makeImagePath, NothingPoster } from "../../Api/utils";
 import TvDetail from "../Detail/TvDetail";
 
 const Wrapper = styled.div`
-  min-width: 1400px;
   background: black;
   height: 80vh;
-`;
-const PlayWrapper = styled.div`
-  min-width: 100%;
-  height: 80vh;
-  background-color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
 `;
 const Banner = styled.div<{ bgPhoto: string }>`
   height: 100vh;
@@ -60,6 +33,201 @@ const Overview = styled.p`
   font-size: 30px;
   width: 50%;
 `;
+const PageChange = styled.div`
+  width: 100%;
+  height: 400px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  @media screen and (max-width: 1280px) {
+    height: 150px;
+  }
+`;
+
+export const Increase = styled(motion.div)`
+  width: 50px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  transform-origin: center right;
+`;
+
+export const Decrease = styled(motion.div)`
+  width: 50px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  opacity: 0.7;
+  transform-origin: center left;
+`;
+export const InfoTitle = styled(motion.div)`
+  padding: 10px;
+  background-color: ${(props) => props.theme.black.lighter};
+  opacity: 0;
+  position: absolute;
+  z-index: 5;
+  width: 100%;
+  bottom: 0;
+  p {
+    font-size: 18px;
+    text-align: center;
+  }
+`;
+const Overlays = styled(motion.div)`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+      0deg,
+      rgba(20, 20, 20, 0.1643251050420168) 85%,
+      rgba(20, 20, 20, 1) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(20, 20, 20, 1) 14%,
+      rgba(20, 20, 20, 0.15592174369747902) 28%
+    );
+`;
+
+export const Modal = styled(motion.div)`
+  width: 50%;
+  height: 90vh;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 200;
+`;
+
+export const ModalCover = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 8px;
+    border-radius: 50px;
+    background: black;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(#e0eafc, #cfdef3);
+    border-radius: 50px;
+  }
+  border-radius: 50px 0 0 50px;
+  `;
+export const Span1 = styled(motion.span)`
+    color: white;
+    z-index: 30;
+    font-size: 30px;
+    margin-left: 40px;
+    margin-right: 20px;
+    font-weight: 600;
+    position: absolute;
+    top: -150px;
+    left: 20px;
+    @media screen and (max-width: 1280px) {
+      font-size: 20px;
+      top: -110px;
+      margin-left: 20px;
+    }
+  `;
+  export const SliderContainer = styled(motion.div)`
+    height: 200px;
+    width: 100%;
+    position: relative;
+    margin-bottom: 5%;
+    @media screen and (max-width: 1280px) {
+      margin-bottom: 1%;
+    }
+  `;
+  
+  const Slider = styled.div`
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `;
+  
+  const Row = styled(motion.div)`
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 3px;
+    position: absolute;
+    width: 95%;
+    @media screen and (max-width: 1280px) {
+      height: 150px;
+    }
+  `;
+  
+  const Box = styled(motion.div)<{ bgphoto: string }>`
+    position: relative;
+    background-color: white;
+    height: 200px;
+    border-radius: 4px;
+    background-image: url(${(props) => props.bgphoto});
+    background-size: cover;
+    background-position: center center;
+    cursor: pointer;
+    &:first-child {
+      transform-origin: center left;
+    }
+    &:last-child {
+      transform-origin: center right;
+    }
+    @media screen and (max-width: 1280px) {
+      height: 150px;
+    }
+  `;
+
+export const rowVars = {
+  invisible: (back: boolean) => ({
+    x: back ? -window.outerWidth - 10 : window.outerWidth + 10,
+  }),
+  visible: {
+    x: 0,
+  },
+  exit: (back: boolean) => ({
+    x: back ? window.outerWidth + 10 : -window.outerWidth - 10,
+  }),
+};
+
+const boxVars = {
+  normal: {
+    scale: 1,
+  },
+  hover: {
+    zIndex: 2000,
+    scale: 1.1,
+    y: -40,
+    transition: {
+      delay: 0.1,
+      type: "tween",
+    },
+  },
+  exit: {
+    zIndex: 2000,
+  },
+};
+
+export const infoVars = {
+  hover: {
+    opacity: 1,
+    transition: {
+      duaration: 0.1,
+      type: "tween",
+    },
+  },
+};
 
 function Tv() {
   const navigate = useNavigate();
@@ -90,34 +258,91 @@ function Tv() {
 
   const [aDex, setADex] = useState(false);
   const [tDex, setTDex] = useState(false);
-
+  
+  let offset = 6;
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (tvId: number) => {
     navigate(`/tv/${tvId}`);
     setIsVolum(true);
   };
-  let offset = 6;
+  const onABoxClicked = (tvId: number) => {
+    navigate(`/tv/${tvId}`);
+    setADex((prev) => !prev);
+    setIsVolum(true);
+  };
+
+  const onTBoxClicked = (tvId: number) => {
+    navigate(`/tv/${tvId}`);
+    setTDex((prev) => !prev);
+    setIsVolum(true);
+  };
+
+
   const increaseIndex = () => {
     if (info) {
       if (leaving) return;
       toggleLeaving();
       setIsBack(false);
-      const totalMovies = info?.results.length;
-      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      const totalTvs = info.results.length;
+      const maxIndex = Math.floor(totalTvs / offset) - 1;
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   };
+
   const decreaseIndex = () => {
     if (info) {
       if (leaving) return;
       toggleLeaving();
       setIsBack(true);
-      const totalMovies = info?.results.length - 1;
-      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      const totalTvs = info.results.length - 1;
+      const maxIndex = Math.floor(totalTvs / offset) - 1;
       setIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     }
   };
 
+  const increaseAIndex = () => {
+    if (aInfo) {
+      if (leaving) return;
+      toggleLeaving();
+      setIsBack(false);
+      const totalTvs = aInfo.results.length;
+      const maxIndex = Math.floor(totalTvs / offset) - 1;
+      setAIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
+  };
+
+  const decreaseAIndex = () => {
+    if (aInfo) {
+      if (leaving) return;
+      toggleLeaving();
+      setIsBack(true);
+      const totalTvs = aInfo.results.length - 1;
+      const maxIndex = Math.floor(totalTvs / offset) - 1;
+      setAIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+    }
+  };
+
+  const increaseTIndex = () => {
+    if (tInfo) {
+      if (leaving) return;
+      toggleLeaving();
+      setIsBack(false);
+      const totalTvs = tInfo.results.length;
+      const maxIndex = Math.floor(totalTvs / offset) - 1;
+      setTIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
+  };
+
+  const decreaseTIndex = () => {
+    if (tInfo) {
+      if (leaving) return;
+      toggleLeaving();
+      setIsBack(true);
+      const totalTvs = tInfo.results.length - 1;
+      const maxIndex = Math.floor(totalTvs / offset) - 1;
+      setTIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+    }
+  };
   const onOverlayClicked = () => {
     navigate(`/tv`);
     setIsVolum(false);
@@ -151,9 +376,7 @@ function Tv() {
         <Loading />
       ) : (
         <>
-          <Banner
-            bgPhoto={makeImagePath(info?.results[0].backdrop_path || "")}
-          >
+          <Banner bgPhoto={makeImagePath(info?.results[0].backdrop_path || "")}>
             <Title>{info?.results[0].name}</Title>
             <Overview>{info?.results[0].overview}</Overview>
           </Banner>
@@ -187,7 +410,7 @@ function Tv() {
                 >
                   {info?.results
                     .slice(1)
-                    .slice(aIndex * offset + 1, aIndex * offset + offset + 1)
+                    .slice(offset * index, offset * index + offset)
                     .map((tv) => (
                       <Box
                         layoutId={tv.id + ""}
@@ -199,8 +422,9 @@ function Tv() {
                         transition={{ type: "tween" }}
                         onClick={() => onBoxClicked(tv.id)}
                         bgphoto={
-                          makeImagePath(tv.backdrop_path, "w500") ||
-                          NothingPoster
+                          tv.backdrop_path === null
+                            ? NothingPoster
+                            : makeImagePath(tv.backdrop_path, "w500")
                         }
                       >
                         <InfoTitle variants={infoVars}>
@@ -213,16 +437,16 @@ function Tv() {
             </Slider>
           </SliderContainer>
           <SliderContainer>
-            <Span1>T INDEX</Span1>
+            <Span1>Top Rated Tv Show</Span1>
             <Slider>
               <PageChange>
-                <Decrease whileHover={{ scale: 1.2 }} onClick={decreaseIndex}>
+                <Decrease whileHover={{ scale: 1.2 }} onClick={decreaseTIndex}>
                   <ArrowBackIosIcon
                     style={{ marginLeft: 20 }}
                     fontSize="large"
                   />
                 </Decrease>
-                <Increase whileHover={{ scale: 1.2 }} onClick={increaseIndex}>
+                <Increase whileHover={{ scale: 1.2 }} onClick={increaseTIndex}>
                   <ArrowForwardIosIcon fontSize="large" />
                 </Increase>
               </PageChange>
@@ -240,22 +464,23 @@ function Tv() {
                   transition={{ type: "tween", duration: 1 }}
                   key={tIndex}
                 >
-                  {aInfo?.results
+                  {tInfo?.results
                     .slice(1)
-                    .slice(tIndex * offset + 1, tIndex * offset + offset + 1)
+                    .slice(offset * tIndex, offset * tIndex + offset)
                     .map((tv) => (
                       <Box
-                        layoutId={tv.id + ""}
+                        layoutId={tv.id + "t"}
                         key={tv.id}
                         whileHover="hover"
                         initial="normal"
                         exit="exit"
                         variants={boxVars}
                         transition={{ type: "tween" }}
-                        onClick={() => onBoxClicked(tv.id)}
+                        onClick={() => onTBoxClicked(tv.id)}
                         bgphoto={
-                          makeImagePath(tv.backdrop_path, "w500") ||
-                          NothingPoster
+                          tv.backdrop_path === null
+                            ? NothingPoster
+                            : makeImagePath(tv.backdrop_path, "w500")
                         }
                       >
                         <InfoTitle variants={infoVars}>
@@ -268,16 +493,16 @@ function Tv() {
             </Slider>
           </SliderContainer>
           <SliderContainer>
-            <Span1>A INDEX</Span1>
+            <Span1>On Air TV Show</Span1>
             <Slider>
               <PageChange>
-                <Decrease whileHover={{ scale: 1.2 }} onClick={decreaseIndex}>
+                <Decrease whileHover={{ scale: 1.2 }} onClick={decreaseAIndex}>
                   <ArrowBackIosIcon
                     style={{ marginLeft: 20 }}
                     fontSize="large"
                   />
                 </Decrease>
-                <Increase whileHover={{ scale: 1.2 }} onClick={increaseIndex}>
+                <Increase whileHover={{ scale: 1.2 }} onClick={increaseAIndex}>
                   <ArrowForwardIosIcon fontSize="large" />
                 </Increase>
               </PageChange>
@@ -295,22 +520,23 @@ function Tv() {
                   transition={{ type: "tween", duration: 1 }}
                   key={aIndex}
                 >
-                  {tInfo?.results
+                  {aInfo?.results
                     .slice(1)
-                    .slice(aIndex * offset + 1, aIndex * offset + offset + 1)
+                    .slice(offset * aIndex, offset * aIndex + offset)
                     .map((tv) => (
                       <Box
-                        layoutId={tv.id + ""}
+                        layoutId={tv.id + "a"}
                         key={tv.id}
                         whileHover="hover"
                         initial="normal"
                         exit="exit"
                         variants={boxVars}
                         transition={{ type: "tween" }}
-                        onClick={() => onBoxClicked(tv.id)}
+                        onClick={() => onABoxClicked(tv.id)}
                         bgphoto={
-                          makeImagePath(tv.backdrop_path, "w500") ||
-                          NothingPoster
+                          tv.backdrop_path === null
+                            ? NothingPoster
+                            : makeImagePath(tv.backdrop_path, "w500")
                         }
                       >
                         <InfoTitle variants={infoVars}>
