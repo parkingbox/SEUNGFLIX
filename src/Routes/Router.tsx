@@ -9,6 +9,7 @@ import Upcoming from "../Components/Upcoming/Upcoming";
 import Movies from "../Components/Movie/Movie";
 import UpcomingDetail from "../Components/Detail/UpcomingDetail";
 import MovieDetail from "../Components/Detail/MovieDetail";
+import TvDetail from "../Components/Detail/TvDetail";
 
 function Router() {
   return (
@@ -20,7 +21,7 @@ function Router() {
           <Route path=":movieId" element={<MovieDetail />} />
         </Route>
         <Route path="/tv" element={<Tv />}>
-          <Route path=":tvId" element={<Tv />} />
+          <Route path=":tvId" element={<TvDetail />} />
         </Route>
         <Route path="/upcoming" element={<Upcoming />} />
         <Route path="/upcoming/:upcomingId" element={<UpcomingDetail />} />

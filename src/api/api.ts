@@ -33,7 +33,6 @@ export interface ITv {
   first_air_date: string;
 }
 
-
 interface ITVTrailer {
   key: string;
   id: string;
@@ -120,7 +119,6 @@ export interface IMoiveSimilar {
   backdrop_path: string;
   original_title: string;
 }
-
 
 export interface IGetTVTrailer {
   results: ITVTrailer[];
@@ -242,13 +240,15 @@ export const getTvTrailer = async (tvId?: string) => {
   return await response.json();
 };
 export const getTvSimilar = async (tvId?: string) => {
-  const response = await fetch(`${BASE_PATH}/tv/${tvId}/similar?api_key=${API_KEY}&page=1`);
+  const response = await fetch(
+    `${BASE_PATH}/tv/${tvId}/similar?api_key=${API_KEY}&page=1`
+  );
   return await response.json();
 };
 
 export const getSearch = async (query?: string) => {
   const response = await fetch(
-    `${BASE_PATH}/search/multi?api_key=${API_KEY}&query=${query}&page=1&include_adult=false`
+    `${BASE_PATH}/search/multi?api_key=${API_KEY}&query=${query}`
   );
   return await response.json();
 };

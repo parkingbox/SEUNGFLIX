@@ -26,7 +26,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const Container = styled(motion.div)`
-  font-family: "Raleway Sans";
   width: 100%;
   height: 80vh;
   color: white;
@@ -371,7 +370,9 @@ const MovieDetail = () => {
                   <BannerFooterBox>
                     <BannerFooter>
                       <BannerBtn onClick={volumClick}>
-                        <FontAwesomeIcon icon={volum ? faVolumeHigh : faVolumeMute} />
+                        <FontAwesomeIcon
+                          icon={volum ? faVolumeHigh : faVolumeMute}
+                        />
                       </BannerBtn>
                       <BannerBtn
                         onClick={onClicked}
