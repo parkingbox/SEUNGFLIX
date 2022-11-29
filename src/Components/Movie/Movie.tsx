@@ -48,21 +48,14 @@ const Banner = styled.div<{ bgphoto: string }>`
   background-size: cover;
 `;
 
-const Title = styled(motion.img)`
-  width: 30%;
-  margin-left: 20px;
-  margin-bottom: 20px;
-  padding: 0 20px;
+const Title = styled.h2`
+  font-size: 68px;
+  margin-bottom: 20px; ;
 `;
 
-const Overview = styled(motion.p)`
-  font-size: 34px;
+const Overview = styled.p`
+  font-size: 30px;
   width: 50%;
-  padding: 20px;
-  margin-left: 20px;
-  @media screen and (max-width: 1280px) {
-    font-size: 20px;
-  }
 `;
 
 const PageChange = styled.div`
@@ -512,10 +505,10 @@ function Movies() {
         <Loading />
       ) : (
         <>
-          <Banner bgphoto={makeImagePath(info?.results[0].backdrop_path || "")}>
-            <Title>{info?.results[0].title}</Title>
-            <Overview>{info?.results[0].overview}</Overview>
-          </Banner>
+            <Banner bgphoto={makeImagePath(info?.results[0].backdrop_path || "")}>
+              <Title>{info?.results[0].title}</Title>
+              <Overview>{info?.results[0].overview}</Overview>
+            </Banner>
           <SliderContainer>
             <Span1>Trending Now</Span1>
             <Slider>

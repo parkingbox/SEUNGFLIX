@@ -202,13 +202,14 @@ const BannerVolum = styled(motion.button)`
   background-color: #9ca7b2;
   cursor: pointer;
   position: absolute;
-  right: 215px;
+  right: 220px;
   top: 67px;
 `;
 const BannerFooterBox = styled.footer`
   width: 100%;
   height: 50px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
 `;
 

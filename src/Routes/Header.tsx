@@ -120,18 +120,30 @@ interface IForm {
 function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const moviesMatch = useMatch("/movies");
+  const moviesDetailMatch = useMatch("/movies/:movieId");
   const tvMatch = useMatch("/tv");
+  const tvDetailMatch = useMatch("/tv/:tvId");
   const upcomingMatch = useMatch("/upcoming");
+  const upcomingDetailMatch = useMatch("/upcoming/:upcomingId");
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
   const toggleSearch = () => {
+    setFocus("keyword");
     if (searchOpen) {
+      // trigger the close animation
       inputAnimation.start({
         scaleX: 0,
       });
     } else {
+      // trigger the open animation
       inputAnimation.start({ scaleX: 1 });
+      setTimeout(() => {
+        setSearchOpen((perv) => !perv);
+        inputAnimation.start({
+          scaleX: 0,
+        });
+      }, 10000);
     }
     setSearchOpen((prev) => !prev);
   };
@@ -145,17 +157,24 @@ function Header() {
     });
   }, [scrollY, navAnimation]);
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<IForm>();
+  const { register, handleSubmit, setFocus } = useForm<IForm>();
   const onValid = (data: IForm) => {
-    navigate(`/search?keyword=${data?.keyword}`);
+    navigate(`/search?query=${data?.keyword}`);
   };
-  if (moviesMatch === null && tvMatch === null && upcomingMatch === null)
+  if (
+    moviesMatch === null &&
+    moviesDetailMatch === null &&
+    tvMatch === null &&
+    tvDetailMatch === null &&
+    upcomingMatch == null &&
+    upcomingDetailMatch === null
+  )
     return null;
 
   return (
     <Nav variants={navVars} animate={navAnimation} initial={"top"}>
       <Col>
-        <LogoBox whileHover={{ scale: 1.2 }}>
+        <LogoBox>
           <span>
             <a href="https://github.com/parkingbox/SEUNGFLIX">SEUNGFLIX</a>
           </span>
@@ -167,13 +186,15 @@ function Header() {
           <Item>
             <Link to="movies">
               Movies
-              {moviesMatch && <Circle layoutId="circle" />}
+              {moviesMatch || moviesDetailMatch ? (
+                <Circle layoutId="circle" />
+              ) : null}
             </Link>
           </Item>
           <Item>
             <Link to="tv">
               Tv Shows
-              {tvMatch && <Circle layoutId="circle" />}
+              {tvMatch || tvDetailMatch ? <Circle layoutId="circle" /> : null}
             </Link>
           </Item>
           <Item>

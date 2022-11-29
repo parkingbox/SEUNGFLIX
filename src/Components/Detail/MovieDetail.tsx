@@ -122,6 +122,9 @@ const BannerBtn = styled(motion.button)`
   &:last-child {
     margin-left: 10px;
   }
+  @media screen and (max-width: 1280px) {
+    
+  }
 `;
 
 const DetailBanner = styled.div<{ bgimg?: string }>`
