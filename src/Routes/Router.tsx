@@ -1,4 +1,4 @@
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./Header";
 import Home from "../Components/Home/Home";
 import Search from "../Components/Search/Search";
@@ -13,7 +13,7 @@ import TvDetail from "../Components/Detail/TvDetail";
 
 function Router() {
   return (
-    <HashRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -27,7 +27,7 @@ function Router() {
         <Route path="/upcoming/:upcomingId" element={<UpcomingDetail />} />
         <Route path="/search/*" element={<Search />} />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
