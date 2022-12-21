@@ -1,4 +1,4 @@
-![rounded](https://capsule-render.vercel.app/api?type=rounded&color=timeAuto&text=SEUNGFLIX&fontAlignY=50&fontSize=80&height=200&stroke=000000&strokeWidth=2)
+![waving](https://capsule-render.vercel.app/api?type=waving&color=timeAuto&text=SEUNGFLIX&fontAlignY=50&fontSize=80&height=200&stroke=000000&strokeWidth=2)
 
 <div align='center'>
 
