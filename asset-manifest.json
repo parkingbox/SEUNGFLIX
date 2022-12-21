@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/SEUNGFLIX/static/js/main.4f46bb18.js",
+    "main.js": "/SEUNGFLIX/static/js/main.3d3c0f18.js",
     "index.html": "/SEUNGFLIX/index.html",
-    "main.4f46bb18.js.map": "/SEUNGFLIX/static/js/main.4f46bb18.js.map"
+    "main.3d3c0f18.js.map": "/SEUNGFLIX/static/js/main.3d3c0f18.js.map"
   },
   "entrypoints": [
-    "static/js/main.4f46bb18.js"
+    "static/js/main.3d3c0f18.js"
   ]
 }
