@@ -18,17 +18,60 @@
   <img src="https://img.shields.io/badge/-Recoil--0.7.6-purple"/>
 </div>
 
-Home
+# Description
+> 2022. 11 ~ 2022. 12
+React 및 TypeScript를 활용하여 나만의 Netflix 구현
 
-<p align='center'>
-  <img src="" width=80% height=500 alt='logo'/>
-</p>
+## Overview
+---
+<br/>
 
-Detail
+### Home
 
-<p align='center'>
-  <img src="" width=80% height=500 alt='logo'/>
-</p>
+<img src='https://user-images.githubusercontent.com/85726838/156602223-c39437b2-e3aa-4114-8503-17580bc39511.gif'/>
+
+메인페이지는 넷플릭스와 같은 형태로 만들었습니다.
+<br/>
+<br/>
+<br/>
+<br/>
+
+<!-- ### Movies
+
+The Movie Database (TMDB)의 API를 fetching 하여 메인에는 Trending 영화의
+제목과 영화설명 그리고 하단 영화의 나열은 Framer-motion을 사용하여 Animation을 주었습니다.
+<br />
+<br />  
+ <br />
+<br />
+
+### Movies Detail
+
+<img src='' />
+  하단의 영화를 클릭하면 클릭된 영화의 id값을 React-router-dom의 Nested router를 사용하여
+  Modal창에 값을 넘겨주고 해당 id값을 바탕으로 값을 받아와 나타나도록 하였습니다.
+  <br />
+  <br />   
+  <br />
+  <br />
+
+### Tv
+
+<img src='' />
+  Tv의 구조는 Movies와 동일합니다.
+  <br />
+  <br />   
+  <br />
+  <br /> 
+  
+### Tv Detail
+<img src='' />
+  Tv의 구조는 Movies와 동일합니다.
+  <br />
+  <br />   
+  <br />
+  <br /> -->
+
 </div>
 
 ```
