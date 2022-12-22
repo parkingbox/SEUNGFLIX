@@ -29,7 +29,7 @@
 
 ### Home
 
-<img src='https://user-images.githubusercontent.com/85726838/156602223-c39437b2-e3aa-4114-8503-17580bc39511.gif'/>
+<img src=''/>
 
 메인페이지는 넷플릭스와 같은 형태로 만들었습니다.
 <br/>
@@ -37,13 +37,13 @@
 <br/>
 <br/>
 
-<!-- ### Movies
+### Movies
 
 The Movie Database (TMDB)의 API를 fetching 하여 메인에는 Trending 영화의
 제목과 영화설명 그리고 하단 영화의 나열은 Framer-motion을 사용하여 Animation을 주었습니다.
 <br />
 <br />
- <br />
+<br />
 <br />
 
 ### Movies Detail
@@ -66,12 +66,21 @@ The Movie Database (TMDB)의 API를 fetching 하여 메인에는 Trending 영화
   <br />
 
 ### Tv Detail
+
 <img src='' />
   Tv의 구조는 Movies와 동일합니다.
   <br />
   <br />
   <br />
-  <br /> -->
+  <br />
+
+### Upcoming
+
+개봉 예정의 영화를 나열해주며 선택시 ID값을 넘겨주며 Upcoming Detail에서 영화의 상세정보를 나타냅니다.
+
+### Search
+
+Header의 오른쪽 검색 버튼 클릭 후 검색값 입력시 Upcoming과 같은 형태로 검색값과 일치 또는 비슷한 영화 및 드라마를 나열합니다.
 
 </div>
 
